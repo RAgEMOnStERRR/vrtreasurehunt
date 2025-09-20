@@ -4,10 +4,10 @@
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   </head>
   <body>
-    <a-scene raycaster="far: 20; objects: .clickable">
+    <a-scene>
       <a-sky color="#637C34"></a-sky>
 
-      <a-image class="clickable" src="map.jpg" position="0 1.5 -5" width="8" height="5"></a-image>
+      <a-image src="map.jpg" position="0 1.5 -5" width="8" height="5"></a-image>
 
       <a-sphere class="clickable" position="-2 2.5 -4.9" radius="0.15" color="blue" link="href: index.html; title: Main Building"></a-sphere>
 
@@ -15,19 +15,10 @@
 
       <a-sphere class="clickable" position="0 0.5 -4.9" radius="0.15" color="green" link="href: annexure.html; title: The Annexure"></a-sphere>
 
-      <a-entity movement-controls="speed: 0.1">
-        <a-camera position="0 1.6 0">
-          <a-cursor></a-cursor>
+      <a-entity>
+        <a-camera look-controls="enabled: true;">
+          <a-cursor raycaster="objects: .clickable;"></a-cursor>
         </a-camera>
-
-        <a-entity
-          tracked-controls="hand: right"
-          laser-controls="hand: right"
-        ></a-entity>
-        <a-entity
-          tracked-controls="hand: left"
-          laser-controls="hand: left"
-        ></a-entity>
       </a-entity>
     </a-scene>
   </body>
