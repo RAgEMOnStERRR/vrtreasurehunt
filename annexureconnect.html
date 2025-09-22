@@ -4,34 +4,29 @@
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   </head>
   <body>
-    <a-scene raycaster="far: 20; objects: .clickable">
-      <a-sky color="#637C34"></a-sky>
+    <a-scene>
+      <a-sky src="annexureconnect.jpg"></a-sky>
 
-      <!-- Replace "your-image.jpg" with your actual image filename -->
-      <a-image class="clickable" src="annexureconnect.jpg" position="0 1.5 -5" width="8" height="5"></a-image>
+      <a-sphere
+        class="clickable"
+        position="0 1.5 -5"
+        radius="0.5"
+        color="blue"
+        link="href: scene2.html; title: Next Location"
+      ></a-sphere>
 
-      <!-- Navigation spheres linking back to the main map and other scenes -->
-      <a-sphere class="clickable" position="-2 2.5 -4.9" radius="0.15" color="orange" link="href: map.html; title: Back to Map"></a-sphere>
+      <a-sphere
+        class="clickable"
+        position="0 -2 -5"
+        radius="0.3"
+        color="yellow"
+        link="href: map.html; title: View Map"
+      ></a-sphere>
 
-      <a-sphere class="clickable" position="2 2.5 -4.9" radius="0.15" color="blue" link="href: index.html; title: Main Building"></a-sphere>
-
-      <a-sphere class="clickable" position="-2 1 -4.9" radius="0.15" color="red" link="href: scene2.html; title: The Courtyard"></a-sphere>
-
-      <a-sphere class="clickable" position="2 1 -4.9" radius="0.15" color="green" link="href: annexure.html; title: The Annexure"></a-sphere>
-
-      <a-entity movement-controls="speed: 0.1">
-        <a-camera position="0 1.6 0">
-          <a-cursor></a-cursor>
-        </a-camera>
-
-        <a-entity
-          tracked-controls="hand: right"
-          laser-controls="hand: right"
-        ></a-entity>
-        <a-entity
-          tracked-controls="hand: left"
-          laser-controls="hand: left"
-        ></a-entity>
+      <a-entity>
+        <a-camera position="0 1.6 0"></a-camera>
+        <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
+        <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
       </a-entity>
     </a-scene>
   </body>
