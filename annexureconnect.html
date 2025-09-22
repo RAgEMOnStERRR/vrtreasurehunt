@@ -12,9 +12,7 @@
       <a-sphere class="clickable" position="0 -2 -5" radius="0.3" color="yellow" link="href: map.html; title: View Map"></a-sphere>
 
       <a-entity>
-        <a-camera look-controls="enabled: true">
-          <a-cursor raycaster="objects: .clickable;"></a-cursor>
-        </a-camera>
+        <a-camera position="0 1.6 0"></a-camera>
         <a-entity laser-controls="hand: right" raycaster="objects: .clickable;"></a-entity>
         <a-entity laser-controls="hand: left" raycaster="objects: .clickable;"></a-entity>
       </a-entity>
