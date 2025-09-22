@@ -4,30 +4,98 @@
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   </head>
   <body>
-    <a-scene>
-      <a-sky src="annexureconnect.jpg"></a-sky>
+    <a-scene raycaster="far: 20; objects: .clickable">
+      <!-- 360 degree panoramic image of the courtyard/annexure area -->
+      <a-sky src="annexure-panorama.jpg"></a-sky>
 
-      <a-sphere
-        class="clickable"
-        position="0 1.5 -5"
-        radius="0.5"
-        color="blue"
-        link="href: scene2.html; title: Next Location"
-      ></a-sphere>
+      <!-- Navigation spheres positioned in 3D space -->
+      
+      <!-- Back to Map sphere - positioned high up -->
+      <a-sphere class="clickable" 
+                position="0 8 -3" 
+                radius="0.5" 
+                color="orange" 
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+                link="href: map.html; title: Back to Map">
+        <a-text value="MAP" 
+                position="0 0 0.6" 
+                align="center" 
+                color="white" 
+                scale="2 2 2"></a-text>
+      </a-sphere>
 
-      <a-sphere
-        class="clickable"
-        position="0 -2 -5"
-        radius="0.3"
-        color="yellow"
-        link="href: map.html; title: View Map"
-      ></a-sphere>
+      <!-- Main Building sphere -->
+      <a-sphere class="clickable" 
+                position="-4 3 -2" 
+                radius="0.4" 
+                color="blue" 
+                animation="property: position; to: -4 3.5 -2; dir: alternate; loop: true; dur: 2000"
+                link="href: index.html; title: Main Building">
+        <a-text value="MAIN" 
+                position="0 0 0.5" 
+                align="center" 
+                color="white" 
+                scale="1.5 1.5 1.5"></a-text>
+      </a-sphere>
 
-      <a-entity>
-        <a-camera position="0 1.6 0"></a-camera>
-        <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
-        <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
+      <!-- The Courtyard sphere -->
+      <a-sphere class="clickable" 
+                position="4 3 -2" 
+                radius="0.4" 
+                color="red" 
+                animation="property: scale; to: 1.2 1.2 1.2; dir: alternate; loop: true; dur: 1500"
+                link="href: scene2.html; title: The Courtyard">
+        <a-text value="COURT" 
+                position="0 0 0.5" 
+                align="center" 
+                color="white" 
+                scale="1.5 1.5 1.5"></a-text>
+      </a-sphere>
+
+      <!-- Central interactive element - similar to your index.html yellow sphere -->
+      <a-sphere class="clickable" 
+                position="0 2 -1" 
+                radius="0.3" 
+                color="yellow" 
+                animation="property: rotation; to: 360 0 0; loop: true; dur: 5000">
+        <a-text value="ANNEXURE" 
+                position="0 0 0.4" 
+                align="center" 
+                color="black" 
+                scale="1 1 1"></a-text>
+      </a-sphere>
+
+      <!-- Additional environmental elements -->
+      <a-cylinder position="2 0 -4" radius="0.1" height="4" color="#4CC417"></a-cylinder>
+      <a-cylinder position="-2 0 -4" radius="0.1" height="4" color="#4CC417"></a-cylinder>
+      
+      <!-- Ground plane -->
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10" color="#228B22" opacity="0.3"></a-plane>
+
+      <!-- Camera and controls -->
+      <a-entity movement-controls="speed: 0.1">
+        <a-camera position="0 1.6 0" look-controls="pointerLockEnabled: true">
+          <a-cursor 
+            animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
+            animation__fusing="property: scale; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
+            geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+            material="color: white; shader: flat">
+          </a-cursor>
+        </a-camera>
+
+        <a-entity
+          tracked-controls="hand: right"
+          laser-controls="hand: right">
+        </a-entity>
+        <a-entity
+          tracked-controls="hand: left"
+          laser-controls="hand: left">
+        </a-entity>
       </a-entity>
+
+      <!-- Lighting -->
+      <a-light type="ambient" color="#404040"></a-light>
+      <a-light type="point" position="0 5 0" color="#ffffff"></a-light>
     </a-scene>
   </body>
 </html>
