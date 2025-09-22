@@ -2,22 +2,124 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script>
+      AFRAME.registerComponent('navigate-on-click', {
+        schema: {
+          url: {type: 'string'}
+        },
+        init: function () {
+          var el = this.el;
+          var data = this.data;
+          
+          el.addEventListener('click', function () {
+            console.log('Navigating to:', data.url);
+            window.location.href = data.url;
+          });
+          
+          // Add hover effects for better UX
+          el.addEventListener('mouseenter', function () {
+            el.setAttribute('scale', '1.2 1.2 1.2');
+          });
+          
+          el.addEventListener('mouseleave', function () {
+            el.setAttribute('scale', '1 1 1');
+          });
+        }
+      });
+    </script>
   </head>
   <body>
-    <a-scene>
+    <a-scene 
+      vr-mode-ui="enabled: true" 
+      device-orientation-permission-ui="enabled: true"
+      background="color: #637C34">
+      
+      <!-- VR Controllers -->
+      <a-entity id="leftHand" 
+                hand-controls="hand: left; handModelStyle: lowPoly; color: #ffcccc"
+                laser-controls="hand: left"
+                raycaster="objects: .clickable; lineColor: red; lineOpacity: 0.5">
+      </a-entity>
+      
+      <a-entity id="rightHand" 
+                hand-controls="hand: right; handModelStyle: lowPoly; color: #ccffcc"
+                laser-controls="hand: right"
+                raycaster="objects: .clickable; lineColor: blue; lineOpacity: 0.5">
+      </a-entity>
+
+      <!-- Background -->
       <a-sky color="#637C34"></a-sky>
-
-      <a-image src="map.jpg" position="0 1.5 -5" width="8" height="5"></a-image>
-
-      <a-sphere class="clickable" position="-2 2.5 -4.9" radius="0.15" color="blue" link="href: index.html; title: Main Building"></a-sphere>
-
-      <a-sphere class="clickable" position="2 1 -4.9" radius="0.15" color="red" link="href: scene2.html; title: The Courtyard"></a-sphere>
-
-      <a-sphere class="clickable" position="0 0.5 -4.9" radius="0.15" color="green" link="href: annexure.html; title: The Annexure"></a-sphere>
-
-      <a-entity>
-        <a-camera look-controls="enabled: true;">
-          <a-cursor raycaster="objects: .clickable;"></a-cursor>
+      
+      <!-- Map Image -->
+      <a-image src="map.jpg" 
+               position="0 1.5 -5" 
+               width="8" 
+               height="5">
+      </a-image>
+      
+      <!-- Interactive Spheres with Navigation -->
+      <a-sphere class="clickable" 
+                position="-2 2.5 -4.9" 
+                radius="0.15" 
+                color="blue"
+                navigate-on-click="url: index.html"
+                animation__mouseenter="property: scale; to: 1.2 1.2 1.2; startEvents: mouseenter; dur: 200"
+                animation__mouseleave="property: scale; to: 1 1 1; startEvents: mouseleave; dur: 200">
+        <!-- Text label -->
+        <a-text value="Main Building" 
+                position="0 0.3 0" 
+                align="center" 
+                color="white"
+                scale="2 2 2"
+                billboard="true">
+        </a-text>
+      </a-sphere>
+      
+      <a-sphere class="clickable" 
+                position="2 1 -4.9" 
+                radius="0.15" 
+                color="red"
+                navigate-on-click="url: scene2.html"
+                animation__mouseenter="property: scale; to: 1.2 1.2 1.2; startEvents: mouseenter; dur: 200"
+                animation__mouseleave="property: scale; to: 1 1 1; startEvents: mouseleave; dur: 200">
+        <!-- Text label -->
+        <a-text value="The Courtyard" 
+                position="0 0.3 0" 
+                align="center" 
+                color="white"
+                scale="2 2 2"
+                billboard="true">
+        </a-text>
+      </a-sphere>
+      
+      <a-sphere class="clickable" 
+                position="0 0.5 -4.9" 
+                radius="0.15" 
+                color="green"
+                navigate-on-click="url: annexure.html"
+                animation__mouseenter="property: scale; to: 1.2 1.2 1.2; startEvents: mouseenter; dur: 200"
+                animation__mouseleave="property: scale; to: 1 1 1; startEvents: mouseleave; dur: 200">
+        <!-- Text label -->
+        <a-text value="The Annexure" 
+                position="0 0.3 0" 
+                align="center" 
+                color="white"
+                scale="2 2 2"
+                billboard="true">
+        </a-text>
+      </a-sphere>
+      
+      <!-- Camera with cursor for non-VR fallback -->
+      <a-entity id="rig" 
+                movement-controls="fly: false; constrainToNavMesh: false"
+                position="0 1.6 3">
+        <a-camera look-controls="pointerLockEnabled: true"
+                  wasd-controls="enabled: false">
+          <a-cursor raycaster="objects: .clickable"
+                    geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+                    material="color: white; shader: flat"
+                    animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150">
+          </a-cursor>
         </a-camera>
       </a-entity>
     </a-scene>
