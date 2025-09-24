@@ -7,11 +7,11 @@
     <a-scene raycaster="far: 20; objects: .clickable">
       <a-sky color="#637C34"></a-sky>
 
-      <!-- The main campus map image. Changed from download.jpg to map.jpg -->
-      <a-image src="map.jpg" position="0 1.5 -5" width="8" height="5"></a-image>
+      <!-- Main campus map image. Moved to a z-position of -5.1 to be behind the spheres. -->
+      <a-image src="map.jpg" position="0 1.5 -5.1" width="8" height="5"></a-image>
 
-      <!-- Clickable Spheres (all same size and color) -->
-      <!-- You can manually adjust the position and link for each sphere below -->
+      <!-- Clickable Spheres (all same size, shape, and color) -->
+      <!-- The spheres are at z-position -4.9, ensuring they appear on top of the map. -->
       <a-sphere class="clickable" position="-2 2.5 -4.9" radius="0.15" color="blue" link="href: index.html; title: Main Building"></a-sphere>
       <a-sphere class="clickable" position="2 1 -4.9" radius="0.15" color="blue" link="href: cttop.html; title: CT Top"></a-sphere>
       <a-sphere class="clickable" position="0 0.5 -4.9" radius="0.15" color="blue" link="href: annexure.html; title: The Annexure"></a-sphere>
@@ -26,6 +26,7 @@
       <a-sphere class="clickable" position="-1.5 -0.5 -4.9" radius="0.15" color="blue" link="href: eeentrance.html; title: EEE Entrance"></a-sphere>
       <a-sphere class="clickable" position="1.0 0.8 -4.9" radius="0.15" color="blue" link="href: oatjungle.html; title: Oat Jungle"></a-sphere>
       <a-sphere class="clickable" position="-2.0 1.0 -4.9" radius="0.15" color="blue" link="href: nearboyshostel.html; title: Near Boys Hostel"></a-sphere>
+      
       <a-entity movement-controls="speed: 0.1">
         <a-camera position="0 1.6 0">
           <a-cursor></a-cursor>
@@ -43,4 +44,5 @@
     </a-scene>
   </body>
 </html>
+
 
