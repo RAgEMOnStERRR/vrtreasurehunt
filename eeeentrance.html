@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>EEE Treasure Hunt</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-html-shader@0.2.0/dist/aframe-html-shader.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -75,18 +75,31 @@
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-       
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            backdrop-filter: blur(5px);
+        }
     </style>
 </head>
 <body>
-    
+    <div class="title">EEE Treasure Hunt Adventure</div>
     
     <a-scene>
         <!-- Sky background -->
-        <a-sky src="eeeentrance.jpeg"></a-sky>
+        <a-sky color="#6ab4ff"></a-sky>
         
         <!-- Next location marker - Enhanced Compass icon in top right corner -->
-        <a-entity class="clickable" position="10.5 10.5 -4" scale="1.5 1.5 1.5" link="href: scene2.html; title: Next Location">
+        <a-entity id="compass" class="clickable" position="4 3 -4">
             <!-- Compass base -->
             <a-cylinder 
                 position="0 0 0" 
@@ -153,7 +166,7 @@
             <!-- Floating animation -->
             <a-animation 
                 attribute="position" 
-                to="4.5 3.7 -5" 
+                to="4 3.2 -4" 
                 dur="2000" 
                 direction="alternate" 
                 repeat="indefinite">
@@ -161,7 +174,7 @@
         </a-entity>
         
         <!-- Map marker - Enhanced Map icon in top left corner -->
-        <a-entity class="clickable" position="-7.5 10.5 -4" scale="1.5 1.5 1.5" link="href: map.html; title: View Map">
+        <a-entity id="map" class="clickable" position="-4 3 -4">
             <!-- Map scroll base -->
             <a-cylinder 
                 position="0 0 0" 
@@ -208,7 +221,7 @@
             <!-- Floating animation -->
             <a-animation 
                 attribute="position" 
-                to="-4.5 3.7 -5" 
+                to="-4 3.2 -4" 
                 dur="2000" 
                 direction="alternate" 
                 repeat="indefinite">
@@ -224,7 +237,7 @@
         </a-entity>
         
         <!-- Hidden treasure - Enhanced Chest icon -->
-        <a-entity id="treasure" class="clickable treasure" position="0 0.5 -4" scale="1 1 1">
+        <a-entity id="treasure" class="clickable treasure" position="0 0.5 -4">
             <!-- Treasure chest base -->
             <a-box 
                 position="0 -0.15 0" 
@@ -278,7 +291,12 @@
             <a-light type="point" intensity="1.0" color="#FFD700" position="0 0.3 0" distance="5"></a-light>
         </a-entity>
         
-        
+        <!-- Additional decorative elements for immersion -->
+        <a-entity position="3 0 -6">
+            <a-box position="0 1 0" width="0.5" height="2" depth="0.5" color="#654321"></a-box>
+            <a-box position="0 2.5 0" width="2" height="0.1" depth="2" color="#8B4513"></a-box>
+            <a-text value="EEE" position="0 2.6 0" align="center" color="#FFD700" scale="3 3 3"></a-text>
+        </a-entity>
         
         <!-- Player with VR controls -->
         <a-entity>
@@ -327,18 +345,24 @@
                 explosion.setAttribute('particle-system', 'preset: explosion; color: #FFD700, #FFA500, #FF4500; particleCount: 150');
                 document.querySelector('a-scene').appendChild(explosion);
                 
-                // Add sound effect (if available)
-                try {
-                    const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA');
-                    audio.play();
-                } catch(e) {
-                    // Sound not critical, continue without it
-                }
-                
                 // Remove explosion after 2 seconds
                 setTimeout(function() {
                     document.querySelector('a-scene').removeChild(explosion);
                 }, 2000);
+            });
+            
+            // Add click event to compass
+            const compass = document.getElementById('compass');
+            compass.addEventListener('click', function() {
+                // Redirect to next scene
+                window.location.href = 'scene2.html';
+            });
+            
+            // Add click event to map
+            const map = document.getElementById('map');
+            map.addEventListener('click', function() {
+                // Redirect to map
+                window.location.href = 'map.html';
             });
         });
         
@@ -346,6 +370,21 @@
         function closePopup() {
             document.getElementById('treasurePopup').style.visibility = 'hidden';
         }
+        
+        // Add hover effects for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            const clickables = document.querySelectorAll('.clickable');
+            clickables.forEach(function(clickable) {
+                // Add hover animation
+                clickable.addEventListener('mouseenter', function() {
+                    this.setAttribute('scale', '1.1 1.1 1.1');
+                });
+                
+                clickable.addEventListener('mouseleave', function() {
+                    this.setAttribute('scale', '1 1 1');
+                });
+            });
+        });
     </script>
 </body>
 </html>
