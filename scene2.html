@@ -5,16 +5,24 @@
   </head>
   <body>
     <a-scene>
-      <a-sky src="vrimage1.jpg"></a-sky>
+      <a-sky src="vrimage2.jpeg"></a-sky>
 
-      <a-sphere
-        class="clickable"
-        position="0 1.5 -5"
-        radius="0.5"
-        color="blue"
-        link="href: scene2.html; title: Next Location"
-      ></a-sphere>
-
+      <a-entity class="clickable" link="href: annexure.html; title: Next Location">
+        <a-cone position="0 1.5 -5" radius-bottom="0.5" radius-top="0" height="1" rotation="90 0 0" color="red"></a-cone>
+        <a-cylinder position="0 1.5 -4.5" radius="0.1" height="1.5" rotation="90 0 0" color="red"></a-cylinder>
+      </a-entity>
+      
+      <a-entity class="clickable" link="href: index.html; title: Go Back">
+        <a-cone position="0 1.5 5" radius-bottom="0.5" radius-top="0" height="1" rotation="-90 0 0" color="blue"></a-cone>
+        <a-cylinder position="0 1.5 4.5" radius="0.1" height="1.5" rotation="-90 0 0" color="blue"></a-cylinder>
+      </a-entity>
+      
+      <a-entity movement-controls="speed: 0.1">
+        <a-camera position="0 1.6 0"></a-camera>
+        <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
+        <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
+      </a-entity>
+      
       <a-sphere
         class="clickable"
         position="0 -2 -5"
@@ -23,11 +31,6 @@
         link="href: map.html; title: View Map"
       ></a-sphere>
 
-      <a-entity>
-        <a-camera position="0 1.6 0"></a-camera>
-        <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
-        <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
-      </a-entity>
     </a-scene>
   </body>
 </html>
