@@ -1,33 +1,271 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
+    <title>EEE Treasure Hunt</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  </head>
-  <body>
+    <script src="https://unpkg.com/aframe-html-shader@0.2.0/dist/aframe-html-shader.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+        }
+        .popup-content {
+            background: linear-gradient(135deg, #f5d76e, #d4ac0d);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 5px solid #b7950b;
+            animation: popIn 0.5s ease-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .popup-content h2 {
+            color: #8b6914;
+            margin-top: 0;
+            font-size: 28px;
+        }
+        .popup-content p {
+            color: #5e4a0e;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+        .close-btn {
+            background: #8b6914;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        .close-btn:hover {
+            background: #6b4f0a;
+        }
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 10;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
     <a-scene>
-      <a-sky src="eeeentrance.jpeg"></a-sky>
-
-      <a-sphere
-        class="clickable"
-        position="0 1.5 -5"
-        radius="0.5"
-        color="blue"
-        link="href: scene2.html; title: Next Location"
-      ></a-sphere>
-
-      <a-sphere
-        class="clickable"
-        position="0 -2 -5"
-        radius="0.3"
-        color="yellow"
-        link="href: map.html; title: View Map"
-      ></a-sphere>
-
-      <a-entity>
-        <a-camera position="0 1.6 0"></a-camera>
-        <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
-        <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
-      </a-entity>
+        <!-- Sky background -->
+        <a-sky src="eeeentrance.jpeg"></a-sky>
+        
+        <!-- Next location marker - Compass icon -->
+        <a-entity class="clickable" position="2 1.8 -4" link="href: scene2.html; title: Next Location">
+            <a-cylinder 
+                position="0 0 0" 
+                radius="0.2" 
+                height="0.05" 
+                color="#FFD700"
+                rotation="0 0 0">
+            </a-cylinder>
+            <a-cylinder 
+                position="0 0.1 0" 
+                radius="0.15" 
+                height="0.05" 
+                color="#FFD700"
+                rotation="0 0 0">
+            </a-cylinder>
+            <a-triangle 
+                position="0 0.2 0" 
+                vertex-a="0 0.2 0" 
+                vertex-b="-0.15 -0.15 0" 
+                vertex-c="0.15 -0.15 0" 
+                color="#FF0000"
+                rotation="0 0 0">
+            </a-triangle>
+            <a-ring 
+                position="0 0.05 0" 
+                radius-inner="0.15" 
+                radius-outer="0.2" 
+                color="#8B4513"
+                rotation="-90 0 0">
+            </a-ring>
+            <a-text 
+                value="N" 
+                position="0 0.25 0.01" 
+                align="center" 
+                color="#000000" 
+                scale="2 2 2">
+            </a-text>
+            <a-animation 
+                attribute="rotation" 
+                to="0 360 0" 
+                dur="5000" 
+                repeat="indefinite">
+            </a-animation>
+        </a-entity>
+        
+        <!-- Map marker - Map icon -->
+        <a-entity class="clickable" position="-2 0.5 -3" link="href: map.html; title: View Map">
+            <a-box 
+                position="0 0 0" 
+                width="0.4" 
+                height="0.3" 
+                depth="0.05" 
+                color="#8B4513">
+            </a-box>
+            <a-plane 
+                position="0 0 0.03" 
+                width="0.35" 
+                height="0.25" 
+                color="#F5F5DC">
+            </a-plane>
+            <a-plane 
+                position="-0.1 0.05 0.035" 
+                width="0.1" 
+                height="0.15" 
+                color="#FF6347">
+            </a-plane>
+            <a-plane 
+                position="0.1 -0.05 0.035" 
+                width="0.15" 
+                height="0.1" 
+                color="#4682B4">
+            </a-plane>
+            <a-circle 
+                position="0.05 0.08 0.035" 
+                radius="0.03" 
+                color="#32CD32">
+            </a-circle>
+            <a-animation 
+                attribute="position" 
+                to="-2 0.7 -3" 
+                dur="2000" 
+                direction="alternate" 
+                repeat="indefinite">
+            </a-animation>
+        </a-entity>
+        
+        <!-- Hidden treasure - Chest icon -->
+        <a-entity id="treasure" class="clickable treasure" position="0 -1 -4" scale="0.8 0.8 0.8">
+            <!-- Treasure chest base -->
+            <a-box 
+                position="0 -0.1 0" 
+                width="0.6" 
+                height="0.2" 
+                depth="0.4" 
+                color="#8B4513">
+            </a-box>
+            <!-- Treasure chest lid -->
+            <a-box 
+                position="0 0.1 0" 
+                width="0.6" 
+                height="0.05" 
+                depth="0.4" 
+                color="#A0522D" 
+                rotation="-30 0 0">
+            </a-box>
+            <!-- Treasure chest lock -->
+            <a-cylinder 
+                position="0 0.05 0.2" 
+                radius="0.03" 
+                height="0.05" 
+                color="#FFD700">
+            </a-cylinder>
+            <!-- Glowing particles around treasure -->
+            <a-entity particle-system="preset: star; color: #FFD700; particleCount: 20"></a-entity>
+            <!-- Subtle rotation animation -->
+            <a-animation 
+                attribute="rotation" 
+                to="0 360 0" 
+                dur="15000" 
+                repeat="indefinite">
+            </a-animation>
+        </a-entity>
+        
+        <!-- Player with VR controls -->
+        <a-entity>
+            <a-camera position="0 1.6 0"></a-camera>
+            <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
+            <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
+        </a-entity>
+        
+        <!-- Ground plane -->
+        <a-plane 
+            position="0 0 -4" 
+            rotation="-90 0 0" 
+            width="10" 
+            height="10" 
+            color="#7CFC00">
+        </a-plane>
     </a-scene>
-  </body>
+    
+    <!-- Treasure found popup -->
+    <div id="treasurePopup" class="popup-overlay">
+        <div class="popup-content">
+            <h2>🎉 Treasure Found! 🎉</h2>
+            <p>Congratulations! You've discovered the hidden treasure near the EEE building!</p>
+            <p>Your next clue is: <strong>"Look for the tallest structure on campus"</strong></p>
+            <button class="close-btn" onclick="closePopup()">Continue Adventure</button>
+        </div>
+    </div>
+    
+    <!-- Instructions -->
+    <div class="instructions">
+        <h3>Treasure Hunt Instructions</h3>
+        <p>Use VR controllers to interact with objects:</p>
+        <p>• Compass icon - Go to next location</p>
+        <p>• Map icon - View the treasure map</p>
+        <p>• Find the hidden treasure chest!</p>
+    </div>
+
+    <script>
+        // Wait for A-Frame to load
+        document.querySelector('a-scene').addEventListener('loaded', function() {
+            // Add click event to treasure
+            const treasure = document.getElementById('treasure');
+            treasure.addEventListener('click', function() {
+                // Show popup
+                document.getElementById('treasurePopup').style.visibility = 'visible';
+                
+                // Add explosion effect
+                const explosion = document.createElement('a-entity');
+                explosion.setAttribute('position', treasure.getAttribute('position'));
+                explosion.setAttribute('particle-system', 'preset: explosion; color: #FFD700, #FFA500, #FF4500; particleCount: 100');
+                document.querySelector('a-scene').appendChild(explosion);
+                
+                // Remove explosion after 2 seconds
+                setTimeout(function() {
+                    document.querySelector('a-scene').removeChild(explosion);
+                }, 2000);
+            });
+        });
+        
+        // Function to close popup
+        function closePopup() {
+            document.getElementById('treasurePopup').style.visibility = 'hidden';
+        }
+    </script>
+</body>
 </html>
