@@ -2,43 +2,29 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <!-- look-at component -->
-    <script src="https://cdn.jsdelivr.net/gh/ngokevin/kframe/components/look-at/dist/aframe-look-at-component.min.js"></script>
   </head>
   <body>
     <a-scene>
-      <!-- 360 background -->
-      <a-sky src="vrimage2.jpg"></a-sky>
+      <a-sky src="vrimage2.jpeg"></a-sky>
 
-      <!-- Forward arrow -->
-      <a-image
+      <a-gltf-model
         class="clickable"
-        src="arrow.png"
-        position="0 1.5 -4"
-        width="1.2"
-        height="1.2"
-        look-at="#camera" 
-        link="href: scene2.html; title: Next Location"
-        transparent="true"
-      ></a-image>
-
-      <!-- Downward arrow -->
-      <a-image
+        src="your_arrow_file.glb"
+        position="0 1.5 -5"
+        rotation="0 180 0"
+        scale="0.5 0.5 0.5"
+        link="href: annexure.html; title: Next Location"
+      ></a-gltf-model>
+      
+      <a-gltf-model
         class="clickable"
-        src="arrow.png"
-        position="0 -1.5 -4"
-        rotation="0 0 180"
-        width="1"
-        height="1"
-        look-at="#camera"
-        link="href: map.html; title: View Map"
-        transparent="true"
-      ></a-image>
+        src="your_arrow_file.glb"
+        position="0 1.5 5"
+        rotation="0 0 0"
+        scale="0.5 0.5 0.5"
+        link="href: index.html; title: Go Back"
+      ></a-gltf-model>
 
-      <!-- Camera -->
-      <a-entity id="camera" camera look-controls position="0 1.6 0"></a-entity>
-    </a-scene>
+      </a-scene>
   </body>
 </html>
-
-
