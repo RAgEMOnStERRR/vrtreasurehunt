@@ -5,26 +5,39 @@
   </head>
   <body>
     <a-scene>
-      <a-sky src="vrimage2.jpeg"></a-sky>
+      <!-- Current 360 background -->
+      <a-sky src="vrimage1.jpg"></a-sky>
 
-      <a-gltf-model
+      <!-- Arrow pointing forward to scene2 -->
+      <a-image
         class="clickable"
-        src="your_arrow_file.glb"
-        position="0 1.5 -5"
-        rotation="0 180 0"
-        scale="0.5 0.5 0.5"
-        link="href: annexure.html; title: Next Location"
-      ></a-gltf-model>
-      
-      <a-gltf-model
-        class="clickable"
-        src="your_arrow_file.glb"
-        position="0 1.5 5"
+        src="arrow.png"                <!-- replace with your arrow image -->
+        position="0 1.5 -4"
         rotation="0 0 0"
-        scale="0.5 0.5 0.5"
-        link="href: index.html; title: Go Back"
-      ></a-gltf-model>
+        width="1"
+        height="1"
+        link="href: scene2.html; title: Next Location"
+        transparent="true"
+      ></a-image>
 
-      </a-scene>
+      <!-- Arrow pointing downward to map -->
+      <a-image
+        class="clickable"
+        src="arrow.png"                <!-- same arrow but rotated -->
+        position="0 -1.5 -4"
+        rotation="0 0 180"
+        width="0.7"
+        height="0.7"
+        link="href: map.html; title: View Map"
+        transparent="true"
+      ></a-image>
+
+      <!-- Camera + controllers -->
+      <a-entity>
+        <a-camera position="0 1.6 0"></a-camera>
+        <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
+        <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
+      </a-entity>
+    </a-scene>
   </body>
 </html>
