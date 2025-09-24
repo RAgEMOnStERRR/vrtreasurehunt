@@ -335,36 +335,18 @@
         <a-light type="directional" color="#FFFFFF" intensity="0.7" position="-1 1 1"></a-light>
     </a-scene>
     
-    <!-- Treasure found popup -->
+    <!-- Merged treasure found and next location popup -->
     <div id="treasurePopup" class="popup-overlay">
         <div class="popup-content">
             <h2>🎉 Treasure Found! 🎉</h2>
             <p>Congratulations! You've discovered the hidden treasure near the EEE building!</p>
-            <p>Your next clue is: <strong>"Look for the tallest structure on campus"</strong></p>
             <p>You've earned 50 treasure points!</p>
-            <button class="close-btn" onclick="closePopup()">Continue Adventure</button>
-        </div>
-    </div>
-
-    <!-- Map popup -->
-    <div id="mapPopup" class="popup-overlay">
-        <div class="popup-content">
-            <h2>🗺️ Treasure Map</h2>
-            <p>You are here: <strong>EEE Building Entrance</strong></p>
-            <p>Treasure locations marked with ⭐</p>
-            <p>Next destination: <strong>Campus Tower</strong></p>
-            <button class="close-btn" onclick="closeMapPopup()">Close Map</button>
-        </div>
-    </div>
-
-    <!-- Next location popup -->
-    <div id="nextPopup" class="popup-overlay">
-        <div class="popup-content">
-            <h2>🧭 Next Location</h2>
-            <p>Following the compass to the next treasure location...</p>
+            <br>
+            <h2>🧭 Next Adventure</h2>
+            <p>Your next clue is: <strong>"Look for the tallest structure on campus"</strong></p>
             <p><strong>Destination: Campus Tower</strong></p>
             <p>Look for the tallest building on campus!</p>
-            <button class="close-btn" onclick="closeNextPopup()">Got it!</button>
+            <button class="close-btn" onclick="closePopup()">Continue Adventure</button>
         </div>
     </div>
     
@@ -418,20 +400,20 @@
                 }, 3000);
             });
 
-            // Add click event to compass (next location)
+            // Add click event to compass (redirect to annexure.html)
             const compass = document.getElementById('compass');
             compass.addEventListener('click', function(evt) {
                 console.log('Compass clicked!');
                 evt.stopPropagation();
-                document.getElementById('nextPopup').style.visibility = 'visible';
+                window.location.href = 'annexure.html';
             });
 
-            // Add click event to map
+            // Add click event to map (redirect to map.html)
             const mapIcon = document.getElementById('mapIcon');
             mapIcon.addEventListener('click', function(evt) {
                 console.log('Map clicked!');
                 evt.stopPropagation();
-                document.getElementById('mapPopup').style.visibility = 'visible';
+                window.location.href = 'map.html';
             });
 
             // Add hover effects
@@ -452,23 +434,11 @@
             document.getElementById('treasurePopup').style.visibility = 'hidden';
         }
 
-        // Function to close map popup
-        function closeMapPopup() {
-            document.getElementById('mapPopup').style.visibility = 'hidden';
-        }
-
-        // Function to close next location popup
-        function closeNextPopup() {
-            document.getElementById('nextPopup').style.visibility = 'hidden';
-        }
-
         // Add keyboard controls for accessibility
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 // Close any open popups
                 closePopup();
-                closeMapPopup();
-                closeNextPopup();
             }
         });
     </script>
