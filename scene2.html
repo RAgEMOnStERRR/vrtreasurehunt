@@ -7,21 +7,23 @@
     <a-scene>
       <a-sky src="vrimage2.jpeg"></a-sky>
 
-      <a-entity class="clickable" link="href: annexure.html; title: Next Location">
-        <a-pyramid position="0 1.5 -5.25" radius="0.4" height="0.5" rotation="90 0 0" color="red"></a-pyramid>
-        <a-cylinder position="0 1.5 -4.75" radius="0.1" height="1" rotation="90 0 0" color="red"></a-cylinder>
-      </a-entity>
+      <a-gltf-model
+        class="clickable"
+        src="vrarrow.gltf"
+        position="0 1.5 -5"
+        rotation="0 180 0"
+        scale="0.5 0.5 0.5"
+        link="href: annexure.html; title: Next Location"
+      ></a-gltf-model>
       
-      <a-entity class="clickable" link="href: index.html; title: Go Back">
-        <a-pyramid position="0 1.5 5.25" radius="0.4" height="0.5" rotation="-90 0 0" color="blue"></a-pyramid>
-        <a-cylinder position="0 1.5 4.75" radius="0.1" height="1" rotation="-90 0 0" color="blue"></a-cylinder>
-      </a-entity>
-      
-      <a-entity movement-controls="speed: 0.1">
-        <a-camera position="0 1.6 0"></a-camera>
-        <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
-        <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
-      </a-entity>
+      <a-gltf-model
+        class="clickable"
+        src="vrarrow.gltf"
+        position="0 1.5 5"
+        rotation="0 0 0"
+        scale="0.5 0.5 0.5"
+        link="href: index.html; title: Go Back"
+      ></a-gltf-model>
       
       <a-sphere
         class="clickable"
@@ -31,6 +33,11 @@
         link="href: map.html; title: View Map"
       ></a-sphere>
 
+      <a-entity movement-controls="speed: 0.1">
+        <a-camera position="0 1.6 0"></a-camera>
+        <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
+        <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
+      </a-entity>
     </a-scene>
   </body>
 </html>
