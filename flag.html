@@ -4,132 +4,60 @@
     <title>EEE Treasure Hunt</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #000;
-      }
-      .instructions {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 10px 15px;
-        border-radius: 8px;
-        font-size: 14px;
-        z-index: 10;
-        max-width: 300px;
-        backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      .click-indicator {
-        position: absolute;
-        bottom: 60px;
-        right: 20px;
-        background: rgba(255, 215, 0, 0.9);
-        color: black;
-        padding: 10px 15px;
-        border-radius: 8px;
-        font-size: 12px;
-        z-index: 10;
-        animation: pulse 2s infinite;
-      }
-      @keyframes pulse {
-        0% { opacity: 0.7; }
-        50% { opacity: 1; }
-        100% { opacity: 0.7; }
-      }
+      body { margin: 0; overflow: hidden; }
     </style>
   </head>
   <body>
-    <a-scene vr-mode-ui="enabled: true">
+    <a-scene>
+      <!-- Background -->
       <a-sky src="flag.jpeg"></a-sky>
 
-      <!-- ARROW NORTH -->
-      <a-entity id="arrow-north" class="clickable" position="4.0 0.5 -5" scale="1.5 1.5 1.5">
-        <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
-        <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
-        <a-text value="1" color="white" position="0 0.5 0" align="center"></a-text>
-      </a-entity>
+      <!-- NEXT (Gold box) -->
+      <a-box id="arrow-next" class="clickable" position="4.5 3.5 -5"
+             depth="0.3" height="0.5" width="0.5" color="#FFD700">
+      </a-box>
 
-      <!-- ARROW EAST -->
-      <a-entity id="arrow-east" class="clickable" position="-2.5 0.5 5" scale="1.5 1.5 1.5" rotation="0 90 0">
-        <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
-        <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
-        <a-text value="2" color="white" position="0 0.5 0" align="center"></a-text>
-      </a-entity>
+      <!-- MAP (Brown box) -->
+      <a-box id="arrow-map" class="clickable" position="-4.5 3.5 -5"
+             depth="0.5" height="0.5" width="0.5" color="#8B4513">
+      </a-box>
 
-      <!-- ARROW WEST -->
-      <a-entity id="arrow-west" class="clickable" position="-4 0.5 -5" scale="1.5 1.5 1.5" rotation="0 -90 0">
-        <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
-        <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
-        <a-text value="3" color="white" position="0 0.5 0" align="center"></a-text>
-      </a-entity>
+      <!-- North Arrow (Green box) -->
+      <a-box id="arrow-north" class="clickable" position="0 4.5 -5"
+             depth="0.3" height="0.5" width="0.5" color="#00FF00">
+      </a-box>
 
-      <!-- ARROW SOUTH -->
-      <a-entity id="arrow-south" class="clickable" position="1.5 0.5 3" scale="1.5 1.5 1.5" rotation="0 180 0">
-        <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
-        <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
-        <a-text value="4" color="white" position="0 0.5 0" align="center"></a-text>
-      </a-entity>
+      <!-- South Arrow (Blue box) -->
+      <a-box id="arrow-south" class="clickable" position="0 2.5 -5"
+             depth="0.3" height="0.5" width="0.5" color="#0000FF">
+      </a-box>
 
-      <!-- MAP OBJECT (brown box) -->
-      <a-entity id="map-object" class="clickable" position="0 -1.2 -4" scale="1 1 1">
-        <a-box depth="0.3" height="0.3" width="0.3" color="#8B4513"></a-box>
-      </a-entity>
+      <!-- East Arrow (Pink box) -->
+      <a-box id="arrow-east" class="clickable" position="6 3.5 -5"
+             depth="0.3" height="0.5" width="0.5" color="#FF00FF">
+      </a-box>
 
-      <!-- Camera -->
-      <a-entity id="rig">
-        <a-camera position="0 1.6 0" look-controls wasd-controls>
-          <!-- Cursor works in both Desktop & VR -->
-          <a-cursor 
-            fuse="true" 
-            fuse-timeout="1500"
-            raycaster="objects: .clickable"
-            geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-            material="color: white; shader: flat"
-            animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
-            animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1">
-          </a-cursor>
-        </a-camera>
+      <!-- West Arrow (Orange box) -->
+      <a-box id="arrow-west" class="clickable" position="-6 3.5 -5"
+             depth="0.3" height="0.5" width="0.5" color="#FFA500">
+      </a-box>
 
-        <!-- VR Controllers -->
-        <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
-        <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
-      </a-entity>
-
-      <!-- Lights -->
-      <a-light type="ambient" color="#4455AA" intensity="0.3"></a-light>
-      <a-light type="directional" color="#FFFFFF" intensity="0.7" position="-1 1 1"></a-light>
+      <!-- Camera + Cursor -->
+      <a-camera look-controls>
+        <a-cursor raycaster="objects: .clickable;" fuse="true" fuse-timeout="500"></a-cursor>
+      </a-camera>
     </a-scene>
 
-    <div class="instructions">
-      <h3>Treasure Hunt Instructions</h3>
-      <p>Click on arrows (1, 2, 3, 4) to navigate</p>
-      <p>Brown box → view campus map</p>
-      <p>In VR: Look at target for 1.5s or use controller to select</p>
-    </div>
-
-    <div class="click-indicator">
-      Move mouse / look at object, click to interact!
-    </div>
-
+    <!-- Navigation script -->
     <script>
-      document.querySelector('a-scene').addEventListener('loaded', function () {
-        console.log('A-Frame scene loaded');
-
-        // Arrow navigation
-        document.getElementById('arrow-north').addEventListener('click', () => window.location.href = 'fountain.html');
-        document.getElementById('arrow-east').addEventListener('click', () => window.location.href = 'ctbase.html');
-        document.getElementById('arrow-west').addEventListener('click', () => window.location.href = 'annexure.html');
-        document.getElementById('arrow-south').addEventListener('click', () => window.location.href = 'mechground.html');
-
-        // Map navigation
-        document.getElementById('map-object').addEventListener('click', () => window.location.href = 'map.html');
-      });
+      document.getElementById('arrow-next').addEventListener('click', () => window.location.href = 'itcse.html');
+      document.getElementById('arrow-map').addEventListener('click', () => window.location.href = 'map.html');
+      document.getElementById('arrow-north').addEventListener('click', () => window.location.href = 'fountain.html');
+      document.getElementById('arrow-east').addEventListener('click', () => window.location.href = 'ctbase.html');
+      document.getElementById('arrow-west').addEventListener('click', () => window.location.href = 'annexure.html');
+      document.getElementById('arrow-south').addEventListener('click', () => window.location.href = 'mechground.html');
     </script>
   </body>
 </html>
+
 
