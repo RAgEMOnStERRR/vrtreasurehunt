@@ -1,201 +1,132 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EEE Treasure Hunt — VR-ready</title>
+  <meta charset="utf-8">
+  <title>EEE Treasure Hunt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <style>
-    body { margin:0; overflow:hidden; background:#000; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
+    body { margin:0; overflow:hidden; background:#000; font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif; }
     .instructions {
-      position:absolute; left:20px; bottom:20px; max-width:340px;
-      background: rgba(0,0,0,0.7); color:#fff; padding:12px 14px; border-radius:8px;
-      font-size:14px; border:1px solid rgba(255,255,255,0.06); backdrop-filter: blur(4px);
-      z-index:10;
+      position:absolute; bottom:20px; left:20px;
+      background:rgba(0,0,0,0.7); color:white;
+      padding:10px 15px; border-radius:8px; max-width:300px;
+      font-size:14px; backdrop-filter:blur(4px);
     }
     .click-indicator {
-      position:absolute; right:20px; bottom:60px;
-      background: rgba(255,215,0,0.95); color:#000; padding:10px 14px; border-radius:8px;
-      font-size:13px; z-index:10; animation:pulse 2s infinite;
+      position:absolute; bottom:60px; right:20px;
+      background:rgba(255,215,0,0.9); color:#000;
+      padding:10px 15px; border-radius:8px; font-size:12px;
+      animation:pulse 2s infinite;
     }
-    @keyframes pulse { 0%{opacity:.7} 50%{opacity:1} 100%{opacity:.7} }
+    @keyframes pulse {0%{opacity:.7;}50%{opacity:1;}100%{opacity:.7;}}
   </style>
 </head>
 <body>
-  <!-- ===== A-FRAME SCENE ===== -->
-  <a-scene vr-mode-ui="enabled: true" loading-screen="enabled: true">
-    <a-assets>
-      <!-- use HTTPS/relative images; replace with your path -->
-      <img id="skyImg" src="eceparking.jpeg" crossorigin="anonymous">
-    </a-assets>
+  <!-- ===== SCENE ===== -->
+  <a-scene vr-mode-ui="enabled: true" cursor="rayOrigin: mouse">
+    <a-sky src="eceparking.jpeg"></a-sky>
 
-    <!-- SKY -->
-    <a-sky src="#skyImg"></a-sky>
-
-    <!-- West arrow (clickable) -->
-    <a-entity id="arrow-west" class="clickable" data-nav="eeeway.html"
-              position="-2 1.2 -3" rotation="0 10 0" scale="1 1 1">
-      <a-box depth="0.2" height="0.7" width="0.9" color="#FFD700" position="0 0 0"></a-box>
-      <a-text value="EEE WAY" align="center" position="0 0 0.15" color="#000" width="1.6" />
+    <!-- WEST ARROW -->
+    <a-entity id="arrow-west" class="clickable"
+              position="-8 0.8 2" scale="1.2 1.2 2.2" rotation="0 -90 0">
+      <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
+      <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513"
+              rotation="-90 0 0" position="0 0.03 0"></a-ring>
+      <a-box position="0 0.1 0.2" width="0.05" height="0.01" depth="0.4" color="#FF0000"></a-box>
+      <a-box position="0 0.1 -0.2" width="0.05" height="0.01" depth="0.4" color="#0000FF"></a-box>
+      <a-animation attribute="position" to="-4 1.5 2" dur="2000"
+                   direction="alternate" repeat="indefinite"></a-animation>
     </a-entity>
 
-    <!-- North arrow (clickable) -->
-    <a-entity id="arrow-north" class="clickable" data-nav="chemical.html"
-              position="1 1.2 -5" rotation="0 0 0" scale="1 1 1">
-      <a-box depth="0.2" height="0.7" width="0.9" color="#FFD700" position="0 0 0"></a-box>
-      <a-text value="CHEMICAL" align="center" position="0 0 0.15" color="#000" width="1.6" />
+    <!-- NORTH ARROW -->
+    <a-entity id="arrow-north" class="clickable"
+              position="0 0.8 -4" scale="1.2 1.2 1.2" rotation="0 0 0">
+      <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
+      <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513"
+              rotation="-90 0 0" position="0 0.03 0"></a-ring>
+      <a-box position="0 0.1 0.2" width="0.05" height="0.01" depth="0.4" color="#FF0000"></a-box>
+      <a-box position="0 0.1 -0.2" width="0.05" height="0.01" depth="0.4" color="#0000FF"></a-box>
+      <a-animation attribute="position" to="0 1.5 -4" dur="2000"
+                   direction="alternate" repeat="indefinite"></a-animation>
     </a-entity>
 
-    <!-- CAMERA RIG with camera & cursor (mouse + fuse) -->
-    <a-entity id="rig" position="0 0 0">
-      <a-camera id="camera" position="0 1.6 0" wasd-controls look-controls>
-        <!-- cursor with fuse (gaze) and raycaster for .clickable -->
-        <a-cursor id="cameraCursor"
-                  geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.02"
-                  material="shader: flat; color: white; opacity: 0.95"
-                  cursor="fuse: true; fuseTimeout: 1200"
-                  raycaster="objects: .clickable; far: 50"></a-cursor>
+    <!-- CAMERA & CONTROLLERS -->
+    <a-entity id="cameraRig">
+      <a-camera position="0 1.6 0" wasd-controls look-controls>
+        <a-cursor id="cursor"
+          position="0 0 -1"
+          geometry="primitive:ring; radiusInner:0.02; radiusOuter:0.03"
+          material="color:white; shader:flat"
+          raycaster="objects:.clickable; far: 10"
+          animation__click="property:scale; startEvents:click; dur:150; from:0.1 0.1 0.1; to:1 1 1"
+          animation__fusing="property:scale; startEvents:fusing; dur:1500; from:1 1 1; to:0.1 0.1 0.1">
+        </a-cursor>
       </a-camera>
+      <!-- VR Controllers -->
+      <a-entity id="left-hand" hand-controls="hand: left" laser-controls="hand: left" raycaster="objects: .clickable; far: 10"></a-entity>
+      <a-entity id="right-hand" hand-controls="hand: right" laser-controls="hand: right" raycaster="objects: .clickable; far: 10"></a-entity>
     </a-entity>
 
-    <!-- VR Controllers (laser-controls add ray + model) -->
-    <a-entity id="rightController" laser-controls="hand: right; model: true"
-              raycaster="objects: .clickable; far: 50"></a-entity>
-    <a-entity id="leftController"  laser-controls="hand: left; model: true"
-              raycaster="objects: .clickable; far: 50"></a-entity>
-
-    <!-- Simple lights -->
-    <a-light type="ambient" color="#667788" intensity="0.4"></a-light>
-    <a-light type="directional" color="#ffffff" intensity="0.8" position="-1 2 1"></a-light>
-
+    <!-- LIGHTS -->
+    <a-light type="ambient" color="#4455AA" intensity="0.3"></a-light>
+    <a-light type="directional" color="#FFFFFF" intensity="0.7" position="-1 1 1"></a-light>
   </a-scene>
 
-  <!-- Overlays -->
+  <!-- UI OVERLAYS -->
   <div class="instructions">
-    <strong>EEE Treasure Hunt</strong>
-    <p>Click the gold boxes to navigate.</p>
-    <ul style="margin:6px 0 0 18px; padding:0;">
-      <li>Desktop: point + click / gaze (hold)</li>
-      <li>VR: point with controller and pull the trigger</li>
-    </ul>
+    <h3>Treasure Hunt</h3>
+    <p>Look & click arrows to navigate:</p>
+    <p>• West → EEE Way<br>• North → Chemical Path</p>
   </div>
-  <div class="click-indicator">Aim at a box and click / trigger!</div>
+  <div class="click-indicator">Aim at arrows & click / trigger!</div>
 
-  <!-- ===== SCRIPT: universal click handling ===== -->
+  <!-- ===== SCRIPT ===== -->
   <script>
-    (function () {
-      const scene = document.querySelector('a-scene');
-      let navLock = false; // prevent double navigation
+    AFRAME.registerComponent('click-handler', {
+      schema: {
+        url: {type: 'string'}
+      },
+      init: function () {
+        const el = this.el;
+        const data = this.data;
 
-      // safe navigation helper: exit VR first if needed
-      function goTo(url) {
-        if (!url || navLock) return;
-        navLock = true;
-        console.log('[nav] going to:', url);
+        // Handle mouse click for desktop
+        el.addEventListener('click', () => this.navigate());
+        // Handle VR controller trigger
+        el.addEventListener('triggerdown', () => this.navigate());
 
-        try {
-          // if immersive VR active, exit first
-          if (scene.is && scene.is('vr-mode')) {
-            // exitVR may return a promise; give a small delay before navigating
-            if (typeof scene.exitVR === 'function') {
-              scene.exitVR();
-            }
-            setTimeout(() => { window.location.href = url; }, 600);
-          } else {
-            window.location.href = url;
-          }
-        } catch (err) {
-          console.warn('Navigation fallback', err);
-          window.location.href = url;
+        // Hover animations
+        el.addEventListener('mouseenter', () =>
+          el.setAttribute('animation', 'property: scale; to: 1.5 1.5 1.5; dur: 200'));
+        el.addEventListener('mouseleave', () =>
+          el.setAttribute('animation', 'property: scale; to: 1.2 1.2 1.2; dur: 200'));
+      },
+      navigate: function () {
+        const scene = document.querySelector('a-scene');
+        if (scene.is('vr-mode')) {
+          scene.exitVR();
+          setTimeout(() => window.location.href = this.data.url, 600);
+        } else {
+          window.location.href = this.data.url;
         }
       }
+    });
 
-      // set up interactions once scene is ready
-      scene.addEventListener('loaded', () => {
-        console.log('Scene loaded — setting up interactions');
+    document.querySelector('a-scene').addEventListener('loaded', () => {
+      const links = [
+        {el: '#arrow-west', page: 'eeeway.html'},
+        {el: '#arrow-north', page: 'chemical.html'}
+      ];
 
-        // --- desktop/gaze clickable handlers (A-Frame will emit "click" on targeted entity) ---
-        const clickables = scene.querySelectorAll('.clickable');
-        clickables.forEach(el => {
-          // scale/hover animation
-          el.addEventListener('mouseenter', () => {
-            el.setAttribute('animation__hover', 'property: scale; to: 1.15 1.15 1.15; dur: 180; easing: easeOutQuad');
-          });
-          el.addEventListener('mouseleave', () => {
-            el.setAttribute('animation__hover', 'property: scale; to: 1 1 1; dur: 180; easing: easeOutQuad');
-          });
-
-          // mouse / camera cursor click (also fired by fuse)
-          el.addEventListener('click', (evt) => {
-            evt.stopPropagation();
-            const url = el.dataset.nav;
-            console.log('click on', el.id, '->', url);
-            goTo(url);
-          });
-        });
-
-        // --- VR controller handling: use controller raycaster intersections on selectstart ---
-        const controllers = [
-          document.getElementById('rightController'),
-          document.getElementById('leftController')
-        ];
-
-        controllers.forEach(ctrl => {
-          if (!ctrl) return;
-
-          // debug line to console
-          ctrl.addEventListener('controllerconnected', (e) => {
-            console.log('Controller connected:', ctrl.id, e.detail);
-          });
-
-          // When user pulls trigger / does select on WebXR
-          ctrl.addEventListener('selectstart', () => {
-            if (navLock) return;
-            // intersections array provided by the raycaster component
-            const rc = ctrl.components && ctrl.components.raycaster;
-            const intersections = rc && rc.intersections;
-            if (intersections && intersections.length) {
-              // first intersection is closest
-              const first = intersections[0];
-              // A-Frame stores element reference on the object's el property
-              const hitEl = (first && first.object && first.object.el) || first.el || null;
-              if (hitEl && hitEl.classList && hitEl.classList.contains('clickable')) {
-                console.log('Controller click hit:', hitEl.id, 'nav ->', hitEl.dataset.nav);
-                goTo(hitEl.dataset.nav);
-              } else {
-                console.log('Controller selectstart — nothing clickable hit');
-              }
-            } else {
-              console.log('Controller selectstart — no intersections found');
-            }
-          });
-
-          // also support older/alternate events as fallback
-          ctrl.addEventListener('triggerdown', () => {
-            // same logic as selectstart (will be redundant if selectstart fired)
-            const rc = ctrl.components && ctrl.components.raycaster;
-            const intersections = rc && rc.intersections;
-            if (intersections && intersections.length) {
-              const first = intersections[0];
-              const hitEl = (first && first.object && first.object.el) || first.el || null;
-              if (hitEl && hitEl.classList && hitEl.classList.contains('clickable')) {
-                goTo(hitEl.dataset.nav);
-              }
-            }
-          });
-        });
-
-        // Small helpful console message for debugging on headset
-        console.log('Interaction setup complete. Test: point & click (desktop) or point & trigger (VR).');
+      links.forEach(({el, page}) => {
+        const target = document.querySelector(el);
+        if (target) {
+          target.setAttribute('click-handler', `url: ${page}`);
+        }
       });
-
-      // Optional: keyboard fallback for testing on desktop
-      window.addEventListener('keydown', (e) => {
-        if (e.key === '1') goTo('eeeway.html');
-        if (e.key === '2') goTo('chemical.html');
-      });
-
-    })();
+    });
   </script>
 </body>
 </html>
