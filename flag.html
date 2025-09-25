@@ -44,31 +44,35 @@
     </style>
   </head>
   <body>
-    <a-scene cursor="rayOrigin: mouse" vr-mode-ui="enabled: false">
+    <a-scene vr-mode-ui="enabled: true">
       <a-sky src="flag.jpeg"></a-sky>
 
       <!-- ARROW NORTH -->
       <a-entity id="arrow-north" class="clickable" position="4.0 0.5 -5" scale="1.5 1.5 1.5">
         <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
+        <a-text value="1" color="white" position="0 0.5 0" align="center"></a-text>
       </a-entity>
 
       <!-- ARROW EAST -->
       <a-entity id="arrow-east" class="clickable" position="-2.5 0.5 5" scale="1.5 1.5 1.5" rotation="0 90 0">
         <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
+        <a-text value="2" color="white" position="0 0.5 0" align="center"></a-text>
       </a-entity>
 
       <!-- ARROW WEST -->
       <a-entity id="arrow-west" class="clickable" position="-4 0.5 -5" scale="1.5 1.5 1.5" rotation="0 -90 0">
         <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
+        <a-text value="3" color="white" position="0 0.5 0" align="center"></a-text>
       </a-entity>
 
       <!-- ARROW SOUTH -->
       <a-entity id="arrow-south" class="clickable" position="1.5 0.5 3" scale="1.5 1.5 1.5" rotation="0 180 0">
         <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
+        <a-text value="4" color="white" position="0 0.5 0" align="center"></a-text>
       </a-entity>
 
       <!-- MAP OBJECT (brown box) -->
@@ -77,30 +81,39 @@
       </a-entity>
 
       <!-- Camera -->
-      <a-camera position="0 1.6 0" wasd-controls look-controls>
-        <a-cursor 
-          position="0 0 -1"
-          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-          material="color: white; shader: flat"
-          raycaster="objects: .clickable"
-          animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
-          animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1">
-        </a-cursor>
-      </a-camera>
+      <a-entity id="rig">
+        <a-camera position="0 1.6 0" look-controls wasd-controls>
+          <!-- Cursor works in both Desktop & VR -->
+          <a-cursor 
+            fuse="true" 
+            fuse-timeout="1500"
+            raycaster="objects: .clickable"
+            geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+            material="color: white; shader: flat"
+            animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+            animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1">
+          </a-cursor>
+        </a-camera>
 
+        <!-- VR Controllers -->
+        <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
+        <a-entity laser-controls="hand: left" raycaster="objects: .clickable"></a-entity>
+      </a-entity>
+
+      <!-- Lights -->
       <a-light type="ambient" color="#4455AA" intensity="0.3"></a-light>
       <a-light type="directional" color="#FFFFFF" intensity="0.7" position="-1 1 1"></a-light>
     </a-scene>
 
     <div class="instructions">
       <h3>Treasure Hunt Instructions</h3>
-      <p>Click on arrows to navigate:</p>
-      <p>• North, East, West, South → different pages</p>
-      <p>• Brown box → view campus map</p>
+      <p>Click on arrows (1, 2, 3, 4) to navigate</p>
+      <p>Brown box → view campus map</p>
+      <p>In VR: Look at target for 1.5s or use controller to select</p>
     </div>
 
     <div class="click-indicator">
-      Move mouse to aim, click to interact!
+      Move mouse / look at object, click to interact!
     </div>
 
     <script>
@@ -119,3 +132,4 @@
     </script>
   </body>
 </html>
+
