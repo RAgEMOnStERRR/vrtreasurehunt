@@ -44,77 +44,42 @@
     </style>
   </head>
   <body>
-    <a-scene cursor="rayOrigin: mouse" vr-mode-ui="enabled: true">
+    <a-scene vr-mode-ui="enabled: false">
       <a-sky src="annexure.jpeg"></a-sky>
 
-      <!-- ARROW EAST -->
-      <a-entity id="arrow-east" class="clickable" 
-                position="5 1.5 0" 
-                scale="1.5 1.5 1.5" 
-                rotation="0 90 0"
-                geometry="primitive: box; width: 1; height: 1; depth: 1"
-                material="opacity: 0"
-                cursor-listener>
-        <a-cylinder radius="0.3" height="0.05" color="#FFD700" position="0 0 0"></a-cylinder>
+      <a-entity id="arrow-east" class="clickable" position="5 1.5 0" scale="1.5 1.5 1.5" rotation="0 90 0">
+        <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
         <a-box position="0 0.1 0.2" width="0.05" height="0.01" depth="0.4" color="#FF0000"></a-box>
         <a-box position="0 0.1 -0.2" width="0.05" height="0.01" depth="0.4" color="#0000FF"></a-box>
         <a-animation attribute="position" to="5 2.2 0" dur="2000" direction="alternate" repeat="indefinite"></a-animation>
       </a-entity>
 
-      <!-- ARROW WEST -->
-      <a-entity id="arrow-west" class="clickable" 
-                position="-5 1.5 0" 
-                scale="1.5 1.5 1.5" 
-                rotation="0 -90 0"
-                geometry="primitive: box; width: 1; height: 1; depth: 1"
-                material="opacity: 0"
-                cursor-listener>
-        <a-cylinder radius="0.3" height="0.05" color="#FFD700" position="0 0 0"></a-cylinder>
+      <a-entity id="arrow-west" class="clickable" position="-5 1.5 0" scale="1.5 1.5 1.5" rotation="0 -90 0">
+        <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
         <a-box position="0 0.1 0.2" width="0.05" height="0.01" depth="0.4" color="#FF0000"></a-box>
         <a-box position="0 0.1 -0.2" width="0.05" height="0.01" depth="0.4" color="#0000FF"></a-box>
         <a-animation attribute="position" to="-5 2.2 0" dur="2000" direction="alternate" repeat="indefinite"></a-animation>
       </a-entity>
 
-      <!-- ARROW NORTH -->
-      <a-entity id="arrow-north" class="clickable" 
-                position="0 1.5 -5" 
-                scale="1.5 1.5 1.5" 
-                rotation="0 0 0"
-                geometry="primitive: box; width: 1; height: 1; depth: 1"
-                material="opacity: 0"
-                cursor-listener>
-        <a-cylinder radius="0.3" height="0.05" color="#FFD700" position="0 0 0"></a-cylinder>
+      <a-entity id="arrow-north" class="clickable" position="0 1.5 -5" scale="1.5 1.5 1.5" rotation="0 0 0">
+        <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
         <a-box position="0 0.1 0.2" width="0.05" height="0.01" depth="0.4" color="#FF0000"></a-box>
         <a-box position="0 0.1 -0.2" width="0.05" height="0.01" depth="0.4" color="#0000FF"></a-box>
         <a-animation attribute="position" to="0 2.2 -5" dur="2000" direction="alternate" repeat="indefinite"></a-animation>
       </a-entity>
 
-      <!-- Camera with VR controllers -->
       <a-camera position="0 1.6 0" wasd-controls look-controls>
-        <!-- Cursor for mouse/touch -->
-        <a-cursor 
+        <a-cursor
+          raycaster="objects: .clickable"
           position="0 0 -1"
           geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
           material="color: white; shader: flat"
-          raycaster="objects: .clickable; far: 20"
           animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
           animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1">
         </a-cursor>
-        
-        <!-- VR hand controllers -->
-        <a-entity id="leftHand" 
-                  hand-controls="hand: left"
-                  laser-controls="hand: left"
-                  raycaster="objects: .clickable; far: 20">
-        </a-entity>
-        <a-entity id="rightHand" 
-                  hand-controls="hand: right" 
-                  laser-controls="hand: right"
-                  raycaster="objects: .clickable; far: 20">
-        </a-entity>
       </a-camera>
 
       <a-light type="ambient" color="#4455AA" intensity="0.3"></a-light>
@@ -125,80 +90,30 @@
       <h3>Treasure Hunt Instructions</h3>
       <p>Click on arrows to navigate:</p>
       <p>• East, West, North → different pages</p>
-      <p><strong>VR:</strong> Point and trigger to click</p>
     </div>
 
     <div class="click-indicator">
-      Point cursor/controller at arrows and click/trigger!
+      Move mouse to aim, click to interact!
     </div>
 
     <script>
-      // Register custom component for cursor listening
-      AFRAME.registerComponent('cursor-listener', {
-        init: function () {
-          var el = this.el;
-          
-          // Mouse/touch events
-          el.addEventListener('click', function (evt) {
-            console.log('Clicked:', el.id);
-            handleArrowClick(el.id);
-          });
-          
-          // VR controller events
-          el.addEventListener('triggerdown', function (evt) {
-            console.log('VR Trigger:', el.id);
-            handleArrowClick(el.id);
-          });
-          
-          // Hover effects
-          el.addEventListener('mouseenter', function () {
-            el.setAttribute('animation__hover', {
-              property: 'scale',
-              to: '1.8 1.8 1.8',
-              dur: 300
-            });
-          });
-          
-          el.addEventListener('mouseleave', function () {
-            el.setAttribute('animation__hover', {
-              property: 'scale',
-              to: '1.5 1.5 1.5',
-              dur: 300
-            });
-          });
-        }
-      });
-
-      function handleArrowClick(arrowId) {
-        console.log('Handling click for:', arrowId);
-        
-        switch(arrowId) {
-          case 'arrow-east':
-            window.location.href = 'flag.html';
-            break;
-          case 'arrow-west':
-            window.location.href = 'oatjungle.html';
-            break;
-          case 'arrow-north':
-            window.location.href = 'between.html';
-            break;
-          default:
-            console.log('Unknown arrow clicked:', arrowId);
-        }
-      }
-
       document.querySelector('a-scene').addEventListener('loaded', function () {
-        console.log('A-Frame scene loaded with VR support');
-        
-        // Additional fallback click handlers
-        const arrows = ['arrow-east', 'arrow-west', 'arrow-north'];
-        arrows.forEach(function(arrowId) {
-          const element = document.getElementById(arrowId);
-          if (element) {
-            element.addEventListener('click', function() {
-              handleArrowClick(arrowId);
-            });
-          }
+        console.log('A-Frame scene loaded');
+
+        // Arrow navigation
+        document.getElementById('arrow-east').addEventListener('click', () => {
+          console.log('East arrow clicked');
+          window.location.href = 'flag.html';
+        });
+
+        document.getElementById('arrow-west').addEventListener('click', () => {
+          console.log('West arrow clicked');
+          window.location.href = 'oatjungle.html';
+        });
+
+        document.getElementById('arrow-north').addEventListener('click', () => {
+          console.log('North arrow clicked');
+          window.location.href = 'between.html';
         });
       });
     </script>
