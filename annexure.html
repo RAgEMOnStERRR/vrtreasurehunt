@@ -47,17 +47,8 @@
     <a-scene cursor="rayOrigin: mouse" vr-mode-ui="enabled: false">
       <a-sky src="annexure.jpeg"></a-sky>
 
-      <!-- ARROW NORTH -->
-      <a-entity id="arrow-north" class="clickable" position="4.0 0.5 -5" scale="1.5 1.5 1.5">
-        <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
-        <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
-        <a-box position="0 0.1 0.2" width="0.05" height="0.01" depth="0.4" color="#FF0000"></a-box>
-        <a-box position="0 0.1 -0.2" width="0.05" height="0.01" depth="0.4" color="#0000FF"></a-box>
-        <a-animation attribute="position" to="0 2.2 -5" dur="2000" direction="alternate" repeat="indefinite"></a-animation>
-      </a-entity>
-
       <!-- ARROW EAST -->
-      <a-entity id="arrow-east" class="clickable" position="-4.5 0.5 5" scale="1.5 1.5 1.5" rotation="0 90 0">
+      <a-entity id="arrow-east" class="clickable" position="5 1.5 0" scale="1.5 1.5 1.5" rotation="0 90 0">
         <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
         <a-box position="0 0.1 0.2" width="0.05" height="0.01" depth="0.4" color="#FF0000"></a-box>
@@ -66,7 +57,7 @@
       </a-entity>
 
       <!-- ARROW WEST -->
-      <a-entity id="arrow-west" class="clickable" position="-5 2 0" scale="1.5 1.5 1.5" rotation="0 -90 0">
+      <a-entity id="arrow-west" class="clickable" position="-5 1.5 0" scale="1.5 1.5 1.5" rotation="0 -90 0">
         <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
         <a-box position="0 0.1 0.2" width="0.05" height="0.01" depth="0.4" color="#FF0000"></a-box>
@@ -74,13 +65,13 @@
         <a-animation attribute="position" to="-5 2.2 0" dur="2000" direction="alternate" repeat="indefinite"></a-animation>
       </a-entity>
 
-      <!-- ARROW SOUTH -->
-      <a-entity id="arrow-south" class="clickable" position="1.5 1.5 5" scale="1.5 1.5 1.5" rotation="0 180 0">
+      <!-- ARROW NORTH -->
+      <a-entity id="arrow-north" class="clickable" position="0 1.5 -5" scale="1.5 1.5 1.5" rotation="0 0 0">
         <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
         <a-box position="0 0.1 0.2" width="0.05" height="0.01" depth="0.4" color="#FF0000"></a-box>
         <a-box position="0 0.1 -0.2" width="0.05" height="0.01" depth="0.4" color="#0000FF"></a-box>
-        <a-animation attribute="position" to="0 2.2 5" dur="2000" direction="alternate" repeat="indefinite"></a-animation>
+        <a-animation attribute="position" to="0 2.2 -5" dur="2000" direction="alternate" repeat="indefinite"></a-animation>
       </a-entity>
 
       <!-- Camera -->
@@ -102,7 +93,7 @@
     <div class="instructions">
       <h3>Treasure Hunt Instructions</h3>
       <p>Click on arrows to navigate:</p>
-      <p>• North, East, West, South → different pages</p>
+      <p>• East, West, North → different pages</p>
     </div>
 
     <div class="click-indicator">
@@ -114,10 +105,9 @@
         console.log('A-Frame scene loaded');
 
         // Arrow navigation
-        document.getElementById('arrow-north').addEventListener('click', () => window.location.href = 'north.html');
-        document.getElementById('arrow-east').addEventListener('click', () => window.location.href = 'ctbase.html');
-        document.getElementById('arrow-west').addEventListener('click', () => window.location.href = 'west.html');
-        document.getElementById('arrow-south').addEventListener('click', () => window.location.href = 'ctbase.html');
+        document.getElementById('arrow-east').addEventListener('click', () => window.location.href = 'flag.html');
+        document.getElementById('arrow-west').addEventListener('click', () => window.location.href = 'oatjungle.html');
+        document.getElementById('arrow-north').addEventListener('click', () => window.location.href = 'between.html');
       });
     </script>
   </body>
