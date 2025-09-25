@@ -1,10 +1,8 @@
-
 <!DOCTYPE html>
 <html>
   <head>
     <title>EEE Treasure Hunt</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-html-shader@0.2.0/dist/aframe-html-shader.min.js"></script>
     <style>
       body {
         margin: 0;
@@ -12,7 +10,6 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: #000;
       }
-      .popup-overlay { display: none; } /* not needed anymore */
       .instructions {
         position: absolute;
         bottom: 20px;
@@ -49,57 +46,43 @@
   <body>
     <a-scene cursor="rayOrigin: mouse" vr-mode-ui="enabled: false">
       <a-sky src="volleyball.jpeg"></a-sky>
-      
-      <!-- Compass -->
-      <a-entity id="compass" class="clickable" position="4.5 3.5 -5" scale="1.5 1.5 1.5">
-        <a-cylinder position="0 0 0" radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
-        <a-ring position="0 0.03 0" radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0"></a-ring>
-        <a-cylinder position="0 0.05 0" radius="0.05" height="0.02" color="#C0C0C0"></a-cylinder>
-        <a-box position="0 0.1 0.2" width="0.05" height="0.01" depth="0.4" color="#FF0000"></a-box>
-        <a-box position="0 0.1 -0.2" width="0.05" height="0.01" depth="0.4" color="#0000FF"></a-box>
-        <a-text value="NEXT" position="0 0.4 0" align="center" color="#FF0000" scale="0.8 0.8 0.8"></a-text>
-        <a-light type="point" intensity="0.5" color="#FFD700" position="0 0.2 0"></a-light>
-        <a-animation attribute="rotation" to="0 360 0" dur="8000" repeat="indefinite"></a-animation>
-        <a-animation attribute="position" to="4.5 3.7 -5" dur="2000" direction="alternate" repeat="indefinite"></a-animation>
+
+
+      <!-- ARROW EAST -->
+      <a-entity id="arrow-east" class="clickable" position="-5.5 1.5 3" scale="1.5 1.5 1.5" rotation="0 90 0">
+        <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
+        <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
+        <a-text value="2" color="black" position="0 0.6 0" align="center"></a-text>
       </a-entity>
-      
-      <!-- Map -->
-      <a-entity id="mapIcon" class="clickable" position="-4.5 3.5 -5" scale="1.5 1.5 1.5">
-        <a-cylinder position="0 0 0" radius="0.3" height="0.05" color="#8B4513"></a-cylinder>
-        <a-circle position="0 0.03 0" radius="0.25" color="#F5F5DC" rotation="-90 0 0"></a-circle>
-        <a-plane position="-0.1 0.035 0.1" width="0.15" height="0.1" color="#FF6347" rotation="-90 0 0"></a-plane>
-        <a-plane position="0.1 0.035 -0.1" width="0.1" height="0.15" color="#4682B4" rotation="-90 0 0"></a-plane>
-        <a-circle position="0.05 0.035 0.08" radius="0.03" color="#32CD32" rotation="-90 0 0"></a-circle>
-        <a-entity position="0 0.035 0" rotation="-90 0 0">
-          <a-plane position="-0.05 0 0.05" width="0.02" height="0.1" color="#FF0000" rotation="0 0 45"></a-plane>
-          <a-plane position="0.05 0 -0.05" width="0.02" height="0.1" color="#FF0000" rotation="0 0 45"></a-plane>
-        </a-entity>
-        <a-text value="MAP" position="0 0.4 0" align="center" color="#8B4513" scale="0.8 0.8 0.8"></a-text>
-        <a-light type="point" intensity="0.5" color="#8B4513" position="0 0.2 0"></a-light>
-        <a-animation attribute="position" to="-4.5 3.7 -5" dur="2000" direction="alternate" repeat="indefinite"></a-animation>
-        <a-animation attribute="rotation" to="0 0 5" dur="3000" direction="alternate" repeat="indefinite"></a-animation>
+
+    
+
+      <!-- MAP OBJECT (brown box) -->
+      <a-entity id="map-object" class="clickable" position="0 2.2 -4" scale="1 1 1">
+        <a-box depth="0.3" height="0.3" width="0.3" color="#8B4513"></a-box>
       </a-entity>
-      
+
       <!-- Camera -->
       <a-camera position="0 1.6 0" wasd-controls look-controls>
-        <a-cursor position="0 0 -1"
-                  geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-                  material="color: white; shader: flat"
-                  raycaster="objects: .clickable"
-                  animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
-                  animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1">
+        <a-cursor 
+          position="0 0 -1"
+          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+          material="color: white; shader: flat"
+          raycaster="objects: .clickable"
+          animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+          animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1">
         </a-cursor>
       </a-camera>
-      
+
       <a-light type="ambient" color="#4455AA" intensity="0.3"></a-light>
       <a-light type="directional" color="#FFFFFF" intensity="0.7" position="-1 1 1"></a-light>
     </a-scene>
-    
+
     <div class="instructions">
       <h3>Treasure Hunt Instructions</h3>
-      <p>Click on objects to interact:</p>
-      <p>• Compass icon - Go to next location</p>
-      <p>• Map icon - View the treasure map</p>
+      <p>Click on arrows to navigate:</p>
+      <p>• Arrows → Go to locations</p>
+      <p>• Brown box → View campus map</p>
     </div>
 
     <div class="click-indicator">
@@ -107,31 +90,15 @@
     </div>
 
     <script>
-      document.querySelector('a-scene').addEventListener('loaded', function() {
+      document.querySelector('a-scene').addEventListener('loaded', function () {
         console.log('A-Frame scene loaded');
-        
-        // Compass click
-        document.getElementById('compass').addEventListener('click', function(evt) {
-          evt.stopPropagation();
-          window.location.href = 'annexure.html';
-        });
 
-        // Map click
-        document.getElementById('mapIcon').addEventListener('click', function(evt) {
-          evt.stopPropagation();
-          window.location.href = 'map.html';
-        });
+        // Arrow navigation
 
-        // Hover effects
-        const clickables = document.querySelectorAll('.clickable');
-        clickables.forEach(function(element) {
-          element.addEventListener('mouseenter', function() {
-            this.setAttribute('scale', '1.8 1.8 1.8');
-          });
-          element.addEventListener('mouseleave', function() {
-            this.setAttribute('scale', '1.5 1.5 1.5');
-          });
-        });
+        document.getElementById('arrow-east').addEventListener('click', () => window.location.href = 'eeeway.html');
+       
+        // Map navigation
+        document.getElementById('map-object').addEventListener('click', () => window.location.href = 'map.html');
       });
     </script>
   </body>

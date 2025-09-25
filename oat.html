@@ -45,38 +45,38 @@
   </head>
   <body>
     <a-scene cursor="rayOrigin: mouse" vr-mode-ui="enabled: false">
-      <a-sky src="vrimage2.jpeg"></a-sky>
+      <a-sky src="oat.jpg"></a-sky>
 
       <!-- ARROW NORTH -->
-      <a-entity id="arrow-north" class="clickable" position="5 1.5 -5" scale="1.5 1.5 1.5">
+      <a-entity id="arrow-north" class="clickable" position="8.0 0.5 6" scale="1.5 1.5 1.5">
         <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
         <a-text value="1" color="black" position="0 0.6 0" align="center"></a-text>
       </a-entity>
 
       <!-- ARROW EAST -->
-      <a-entity id="arrow-east" class="clickable" position="-2.5 1.5 5" scale="1.5 1.5 1.5" rotation="0 90 0">
+      <a-entity id="arrow-east" class="clickable" position="-2.5 0.5 5" scale="1.5 1.5 1.5" rotation="0 90 0">
         <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
         <a-text value="2" color="black" position="0 0.6 0" align="center"></a-text>
       </a-entity>
 
       <!-- ARROW WEST -->
-      <a-entity id="arrow-west" class="clickable" position="-4 1.5 -5" scale="1.5 1.5 1.5" rotation="0 -90 0">
+      <a-entity id="arrow-west" class="clickable" position="-4 0.5 -5" scale="1.5 1.5 1.5" rotation="0 -90 0">
         <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
         <a-text value="3" color="black" position="0 0.6 0" align="center"></a-text>
       </a-entity>
 
       <!-- ARROW SOUTH -->
-      <a-entity id="arrow-south" class="clickable" position="1.5 1.5 3" scale="1.5 1.5 1.5" rotation="0 180 0">
+      <a-entity id="arrow-south" class="clickable" position="1.5 0.5 3" scale="1.5 1.5 1.5" rotation="0 180 0">
         <a-cylinder radius="0.3" height="0.05" color="#FFD700"></a-cylinder>
         <a-ring radius-inner="0.2" radius-outer="0.3" color="#8B4513" rotation="-90 0 0" position="0 0.03 0"></a-ring>
         <a-text value="4" color="black" position="0 0.6 0" align="center"></a-text>
       </a-entity>
 
       <!-- MAP OBJECT (brown box) -->
-      <a-entity id="map-object" class="clickable" position="0 2.2 -4" scale="1 1 1">
+      <a-entity id="map-object" class="clickable" position="0 -1.2 -4" scale="1 1 1">
         <a-box depth="0.3" height="0.3" width="0.3" color="#8B4513"></a-box>
       </a-entity>
 
@@ -112,10 +112,10 @@
         console.log('A-Frame scene loaded');
 
         // Arrow navigation
-        document.getElementById('arrow-north').addEventListener('click', () => window.location.href = 'oat.html');
-        document.getElementById('arrow-east').addEventListener('click', () => window.location.href = 'ctpark1.html');
-        document.getElementById('arrow-west').addEventListener('click', () => window.location.href = 'pgground.html');
-        document.getElementById('arrow-south').addEventListener('click', () => window.location.href = 'outjungle.html');
+        document.getElementById('arrow-north').addEventListener('click', () => window.location.href = 'oatjungle.html');
+        document.getElementById('arrow-east').addEventListener('click', () => window.location.href = 'nearboyshostel.html');
+        document.getElementById('arrow-west').addEventListener('click', () => window.location.href = 'oatboyshostel.html');
+        document.getElementById('arrow-south').addEventListener('click', () => window.location.href = 'outsideoat.html');
 
         // Map navigation
         document.getElementById('map-object').addEventListener('click', () => window.location.href = 'map.html');
