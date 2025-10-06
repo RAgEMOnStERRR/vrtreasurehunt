@@ -76,7 +76,20 @@
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-      
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            backdrop-filter: blur(5px);
+        }
         .click-indicator {
             position: absolute;
             bottom: 60px;
@@ -97,9 +110,11 @@
     </style>
 </head>
 <body>
-    <a-scene>
+    <div class="title">EEE Treasure Hunt Adventure</div>
+    
+    <a-scene cursor="rayOrigin: mouse" vr-mode-ui="enabled: false">
         <!-- Sky background -->
-        <a-sky src="eeeentrance.jpeg" color="#87CEEB"></a-sky>
+        <a-sky src="eeeentrance.jpeg"></a-sky>
         
         <!-- Next location marker - Enhanced Compass icon in top right corner -->
         <a-entity id="compass" class="clickable" position="4.5 3.5 -5" scale="1.5 1.5 1.5">
@@ -303,20 +318,15 @@
             <a-light type="point" intensity="1.0" color="#FFD700" position="0 0.3 0" distance="5"></a-light>
         </a-entity>
         
-        <!-- Player camera with cursor for both desktop and VR -->
+        <!-- Player camera -->
         <a-camera position="0 1.6 0" wasd-controls look-controls>
-            <!-- Cursor that works in both desktop and VR mode -->
             <a-cursor 
-                id="cursor"
                 position="0 0 -1"
                 geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-                material="color: white; shader: flat; opacity: 0.9"
-                raycaster="objects: .clickable; far: 20"
-                fuse="true"
-                fuse-timeout="1500"
+                material="color: white; shader: flat"
+                raycaster="objects: .clickable"
                 animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
-                animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
-                animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1">
+                animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1">
             </a-cursor>
         </a-camera>
         
@@ -325,34 +335,51 @@
         <a-light type="directional" color="#FFFFFF" intensity="0.7" position="-1 1 1"></a-light>
     </a-scene>
     
-    <!-- Merged treasure found and next location popup -->
+    <!-- Treasure found popup -->
     <div id="treasurePopup" class="popup-overlay">
         <div class="popup-content">
             <h2>🎉 Treasure Found! 🎉</h2>
             <p>Congratulations! You've discovered the hidden treasure near the EEE building!</p>
-            <p>You've earned 50 treasure points!</p>
-            <br>
-            <h2>🧭 Next Adventure</h2>
             <p>Your next clue is: <strong>"Look for the tallest structure on campus"</strong></p>
+            <p>You've earned 50 treasure points!</p>
+            <button class="close-btn" onclick="closePopup()">Continue Adventure</button>
+        </div>
+    </div>
+
+    <!-- Map popup -->
+    <div id="mapPopup" class="popup-overlay">
+        <div class="popup-content">
+            <h2>🗺️ Treasure Map</h2>
+            <p>You are here: <strong>EEE Building Entrance</strong></p>
+            <p>Treasure locations marked with ⭐</p>
+            <p>Next destination: <strong>Campus Tower</strong></p>
+            <button class="close-btn" onclick="closeMapPopup()">Close Map</button>
+        </div>
+    </div>
+
+    <!-- Next location popup -->
+    <div id="nextPopup" class="popup-overlay">
+        <div class="popup-content">
+            <h2>🧭 Next Location</h2>
+            <p>Following the compass to the next treasure location...</p>
             <p><strong>Destination: Campus Tower</strong></p>
             <p>Look for the tallest building on campus!</p>
-            <button class="close-btn" onclick="closePopup()">Continue Adventure</button>
+            <button class="close-btn" onclick="closeNextPopup()">Got it!</button>
         </div>
     </div>
     
     <!-- Instructions -->
     <div class="instructions">
         <h3>Treasure Hunt Instructions</h3>
-        <p>Look at objects for 1.5 seconds or click to interact:</p>
+        <p>Click on objects to interact:</p>
         <p>• Compass icon - Go to next location</p>
         <p>• Map icon - View the treasure map</p>
         <p>• Find the hidden treasure chest!</p>
-        <p><strong>In VR:</strong> Gaze at objects to select them</p>
     </div>
 
     <!-- Click indicator -->
     <div class="click-indicator">
-        Look at objects to interact!
+        Move mouse to aim, click to interact!
     </div>
 
     <script>
@@ -360,18 +387,9 @@
         document.querySelector('a-scene').addEventListener('loaded', function() {
             console.log('A-Frame scene loaded');
             
-            const cursor = document.getElementById('cursor');
-            
-            // Add click event to treasure (works with both click and fuse)
+            // Add click event to treasure
             const treasure = document.getElementById('treasure');
-            treasure.addEventListener('click', handleTreasureClick);
-            cursor.addEventListener('fusing', function(evt) {
-                if (evt.detail.intersectedEl === treasure) {
-                    console.log('Fusing on treasure');
-                }
-            });
-            
-            function handleTreasureClick(evt) {
+            treasure.addEventListener('click', function(evt) {
                 console.log('Treasure clicked!');
                 evt.stopPropagation();
                 
@@ -398,30 +416,28 @@
                         explosion.parentNode.removeChild(explosion);
                     }
                 }, 3000);
-            }
+            });
 
-            // Add click event to compass (redirect to annexure.html)
+            // Add click event to compass (next location)
             const compass = document.getElementById('compass');
             compass.addEventListener('click', function(evt) {
                 console.log('Compass clicked!');
                 evt.stopPropagation();
-                window.location.href = 'annexure.html';
+                document.getElementById('nextPopup').style.visibility = 'visible';
             });
 
-            // Add click event to map (redirect to map.html)
+            // Add click event to map
             const mapIcon = document.getElementById('mapIcon');
             mapIcon.addEventListener('click', function(evt) {
                 console.log('Map clicked!');
                 evt.stopPropagation();
-                window.location.href = 'map.html';
+                document.getElementById('mapPopup').style.visibility = 'visible';
             });
 
             // Add hover effects
             const clickables = document.querySelectorAll('.clickable');
             clickables.forEach(function(element) {
                 element.addEventListener('mouseenter', function() {
-                    const currentScale = this.getAttribute('scale');
-                    const baseScale = 1.5;
                     this.setAttribute('scale', '1.8 1.8 1.8');
                 });
                 
@@ -436,14 +452,25 @@
             document.getElementById('treasurePopup').style.visibility = 'hidden';
         }
 
+        // Function to close map popup
+        function closeMapPopup() {
+            document.getElementById('mapPopup').style.visibility = 'hidden';
+        }
+
+        // Function to close next location popup
+        function closeNextPopup() {
+            document.getElementById('nextPopup').style.visibility = 'hidden';
+        }
+
         // Add keyboard controls for accessibility
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 // Close any open popups
                 closePopup();
+                closeMapPopup();
+                closeNextPopup();
             }
         });
     </script>
 </body>
 </html>
-
