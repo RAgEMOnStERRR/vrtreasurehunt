@@ -1,15 +1,66 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>EEE Treasure Hunt</title>
+    
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-html-shader@0.2.0/dist/aframe-html-shader.min.js"></script>
     <style>
       body {
         margin: 0;
         overflow: hidden;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: #000;
+      }
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        visibility: hidden;
+      }
+      .popup-content {
+        background: linear-gradient(135deg, #f5d76e, #d4ac0d);
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        max-width: 500px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        border: 5px solid #b7950b;
+        animation: popIn 0.5s ease-out;
+      }
+      @keyframes popIn {
+        0% { transform: scale(0.5); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      .popup-content h2 {
+        color: #8b6914;
+        margin-top: 0;
+        font-size: 28px;
+      }
+      .popup-content p {
+        color: #5e4a0e;
+        font-size: 18px;
+        line-height: 1.5;
+      }
+      .close-btn {
+        background: #8b6914;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 15px;
+        transition: background 0.3s;
+      }
+      .close-btn:hover {
+        background: #6b4f0a;
       }
       .instructions {
         position: absolute;
@@ -25,6 +76,7 @@
         backdrop-filter: blur(5px);
         border: 1px solid rgba(255, 255, 255, 0.1);
       }
+      
       .click-indicator {
         position: absolute;
         bottom: 60px;
@@ -45,232 +97,288 @@
     </style>
   </head>
   <body>
-    <a-scene 
-      vr-mode-ui="enabled: true" 
-      cursor="rayOrigin: mouse" 
-      background="color: #000">
+    
+    
+    <a-scene cursor="rayOrigin: mouse" vr-mode-ui="enabled: false">
+      <a-sky src="entrance1.jpeg"></a-sky>
       
-      <a-assets>
-        <img id="skyTexture" src="entrance1.jpeg">
-      </a-assets>
-      
-     
-
-      <!-- CLICKABLE ARROW EAST -->
-      <a-box 
-        id="arrow-east" 
-        class="clickable raycastable"
-        position="5 1.5 0" 
-        scale="2 2 2" 
-        rotation="0 90 0"
-        color="#FFD700"
-        material="opacity: 0.8"
-        sound="on: click; src: url(data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEfCEGPzPHHdyo=)"
-        >
+      <a-entity id="compass" class="clickable" position="4.5 3.5 -5" scale="1.5 1.5 1.5">
+        <a-cylinder 
+          position="0 0 0" 
+          radius="0.3" 
+          height="0.05" 
+          color="#FFD700"
+          rotation="0 0 0">
+        </a-cylinder>
+        <a-ring 
+          position="0 0.03 0" 
+          radius-inner="0.2" 
+          radius-outer="0.3" 
+          color="#8B4513"
+          rotation="-90 0 0">
+        </a-ring>
+        <a-cylinder 
+          position="0 0.05 0" 
+          radius="0.05" 
+          height="0.02" 
+          color="#C0C0C0">
+        </a-cylinder>
+        <a-box 
+          position="0 0.1 0.2" 
+          width="0.05" 
+          height="0.01" 
+          depth="0.4" 
+          color="#FF0000">
+        </a-box>
+        <a-box 
+          position="0 0.1 -0.2" 
+          width="0.05" 
+          height="0.01" 
+          depth="0.4" 
+          color="#0000FF">
+        </a-box>
         <a-text 
-          value="EAST" 
-          position="0 0.8 0" 
+          value="NEXT" 
+          position="0 0.4 0" 
           align="center" 
-          color="white"
+          color="#FF0000" 
           scale="0.8 0.8 0.8">
         </a-text>
-        <a-cone 
-          position="0 0 0.6" 
-          radius-bottom="0.2" 
-          radius-top="0" 
-          height="0.4" 
-          color="red"
-          rotation="0 0 -90">
-        </a-cone>
-      </a-box>
-
-      <!-- CLICKABLE ARROW WEST -->
-      <a-box 
-        id="arrow-west" 
-        class="clickable raycastable"
-        position="-5 1.5 0" 
-        scale="2 2 2" 
-        rotation="0 -90 0"
-        color="#FFD700"
-        material="opacity: 0.8"
-        sound="on: click; src: url(data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEfCEGPzPHHdyo=)"
-        >
-        <a-text 
-          value="WEST" 
-          position="0 0.8 0" 
-          align="center" 
-          color="white"
-          scale="0.8 0.8 0.8">
-        </a-text>
-        <a-cone 
-          position="0 0 0.6" 
-          radius-bottom="0.2" 
-          radius-top="0" 
-          height="0.4" 
-          color="red"
-          rotation="0 0 -90">
-        </a-cone>
-      </a-box>
-
-      <!-- CLICKABLE ARROW NORTH -->
-      <a-box 
-        id="arrow-north" 
-        class="clickable raycastable"
-        position="0 1.5 -5" 
-        scale="2 2 2" 
-        rotation="0 0 0"
-        color="#FFD700"
-        material="opacity: 0.8"
-        sound="on: click; src: url(data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEfCEGPzPHHdyo=)"
-        >
-        <a-text 
-          value="NORTH" 
-          position="0 0.8 0" 
-          align="center" 
-          color="white"
-          scale="0.8 0.8 0.8">
-        </a-text>
-        <a-cone 
-          position="0 0 0.6" 
-          radius-bottom="0.2" 
-          radius-top="0" 
-          height="0.4" 
-          color="red"
-          rotation="0 0 -90">
-        </a-cone>
-      </a-box>
-
-      <!-- CAMERA WITH VR SUPPORT -->
-      <a-entity id="rig" position="0 1.6 0">
-        <a-camera 
-          look-controls="enabled: true" 
-          wasd-controls="enabled: true"
-          cursor="objects: .raycastable">
-          
-          <!-- GAZE CURSOR -->
-          <a-cursor
-            id="cursor"
-            geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.02"
-            material="color: white; shader: flat"
-            position="0 0 -0.5"
-            raycaster="objects: .raycastable; far: 50"
-            animation__click="property: scale; startEvents: click; dur: 150; from: 1 1 1; to: 1.2 1.2 1.2"
-            animation__fuse="property: scale; startEvents: fusing; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1">
-          </a-cursor>
-        </a-camera>
-        
-        <!-- VR CONTROLLERS -->
-        <a-entity 
-          id="leftController"
-          hand-controls="hand: left; handModelStyle: lowPoly; color: #15ACCF"
-          laser-controls="hand: left"
-          raycaster="objects: .raycastable; far: 50; lineColor: red; lineOpacity: 0.5">
-        </a-entity>
-        
-        <a-entity 
-          id="rightController"
-          hand-controls="hand: right; handModelStyle: lowPoly; color: #15ACCF" 
-          laser-controls="hand: right"
-          raycaster="objects: .raycastable; far: 50; lineColor: red; lineOpacity: 0.5">
-        </a-entity>
+        <a-light type="point" intensity="0.5" color="#FFD700" position="0 0.2 0"></a-light>
+        <a-animation 
+          attribute="rotation" 
+          to="0 360 0" 
+          dur="8000" 
+          repeat="indefinite">
+        </a-animation>
+        <a-animation 
+          attribute="position" 
+          to="4.5 3.7 -5" 
+          dur="2000" 
+          direction="alternate" 
+          repeat="indefinite">
+        </a-animation>
       </a-entity>
-
-      <!-- LIGHTING -->
-      <a-light type="ambient" color="#404040" intensity="0.4"></a-light>
-      <a-light type="directional" position="1 1 1" color="white" intensity="0.6"></a-light>
+      
+      <a-entity id="mapIcon" class="clickable" position="-4.5 3.5 -5" scale="1.5 1.5 1.5">
+        <a-cylinder 
+          position="0 0 0" 
+          radius="0.3" 
+          height="0.05" 
+          color="#8B4513"
+          rotation="0 0 0">
+        </a-cylinder>
+        <a-circle 
+          position="0 0.03 0" 
+          radius="0.25" 
+          color="#F5F5DC"
+          rotation="-90 0 0">
+        </a-circle>
+        <a-plane 
+          position="-0.1 0.035 0.1" 
+          width="0.15" 
+          height="0.1" 
+          color="#FF6347"
+          rotation="-90 0 0">
+        </a-plane>
+        <a-plane 
+          position="0.1 0.035 -0.1" 
+          width="0.1" 
+          height="0.15" 
+          color="#4682B4"
+          rotation="-90 0 0">
+        </a-plane>
+        <a-circle 
+          position="0.05 0.035 0.08" 
+          radius="0.03" 
+          color="#32CD32"
+          rotation="-90 0 0">
+        </a-circle>
+        <a-entity position="0 0.035 0" rotation="-90 0 0">
+          <a-plane position="-0.05 0 0.05" width="0.02" height="0.1" color="#FF0000" rotation="0 0 45"></a-plane>
+          <a-plane position="0.05 0 -0.05" width="0.02" height="0.1" color="#FF0000" rotation="0 0 45"></a-plane>
+        </a-entity>
+        <a-text 
+          value="MAP" 
+          position="0 0.4 0" 
+          align="center" 
+          color="#8B4513" 
+          scale="0.8 0.8 0.8">
+        </a-text>
+        <a-light type="point" intensity="0.5" color="#8B4513" position="0 0.2 0"></a-light>
+        <a-animation 
+          attribute="position" 
+          to="-4.5 3.7 -5" 
+          dur="2000" 
+          direction="alternate" 
+          repeat="indefinite">
+        </a-animation>
+        <a-animation 
+          attribute="rotation" 
+          to="0 0 5" 
+          dur="3000" 
+          direction="alternate" 
+          repeat="indefinite">
+        </a-animation>
+      </a-entity>
+      
+      <a-entity id="treasure" class="clickable treasure" position="0 0.5 -4" scale="1 1 1">
+        <a-box 
+          position="0 -0.15 0" 
+          width="0.8" 
+          height="0.3" 
+          depth="0.5" 
+          color="#8B4513">
+        </a-box>
+        <a-box 
+          position="0 0.1 0" 
+          width="0.8" 
+          height="0.05" 
+          depth="0.5" 
+          color="#A0522D" 
+          rotation="-15 0 0">
+        </a-box>
+        <a-cylinder 
+          position="0 0.05 0.25" 
+          radius="0.04" 
+          height="0.05" 
+          color="#FFD700">
+        </a-cylinder>
+        <a-box 
+          position="0 -0.05 0" 
+          width="0.6" 
+          height="0.1" 
+          depth="0.3" 
+          color="#FFD700">
+        </a-box>
+        <a-entity particle-system="preset: star; color: #FFD700, #FFA500; particleCount: 30"></a-entity>
+        
+        <a-animation 
+          attribute="rotation" 
+          to="0 360 0" 
+          dur="20000" 
+          repeat="indefinite">
+        </a-animation>
+        <a-animation 
+          attribute="position" 
+          to="0 0.7 -4" 
+          dur="3000" 
+          direction="alternate" 
+          repeat="indefinite">
+        </a-animation>
+        <a-light type="point" intensity="1.0" color="#FFD700" position="0 0.3 0" distance="5"></a-light>
+      </a-entity>
+      
+      <a-camera position="0 1.6 0" wasd-controls look-controls>
+        <a-cursor 
+          position="0 0 -1"
+          geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+          material="color: white; shader: flat"
+          raycaster="objects: .clickable"
+          animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+          animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1">
+        </a-cursor>
+      </a-camera>
+      
+      <a-light type="ambient" color="#4455AA" intensity="0.3"></a-light>
+      <a-light type="directional" color="#FFFFFF" intensity="0.7" position="-1 1 1"></a-light>
     </a-scene>
-
+    
+    <div id="treasurePopup" class="popup-overlay">
+      <div class="popup-content">
+        <h2>🎉 Treasure Found! 🎉</h2>
+        <p>Congratulations! You've discovered the hidden treasure near the EEE building!</p>
+        <p>You've earned 50 treasure points!</p>
+        <br>
+        <h2>🧭 Next Adventure</h2>
+        <p>Your next clue is: <strong>"Look for the tallest structure on campus"</strong></p>
+        <p><strong>Destination: Campus Tower</strong></p>
+        <p>Look for the tallest building on campus!</p>
+        <button class="close-btn" onclick="closePopup()">Continue Adventure</button>
+      </div>
+    </div>
+    
     <div class="instructions">
       <h3>Treasure Hunt Instructions</h3>
-      <p>Click on arrows to navigate:</p>
-      <p>• East, West, North → different pages</p>
-      <p><strong>VR:</strong> Point and trigger to click</p>
-      <p><strong>Desktop:</strong> Look and click</p>
+      <p>Click on objects to interact:</p>
+      <p>• Compass icon - Go to next location</p>
+      <p>• Map icon - View the treasure map</p>
+      <p>• Find the hidden treasure chest!</p>
     </div>
 
     <div class="click-indicator">
-      Point at gold boxes and click/trigger!
+      Move mouse to aim, click to interact!
     </div>
 
     <script>
-      // Wait for scene to load
-      document.querySelector('a-scene').addEventListener('loaded', function () {
-        console.log('Scene loaded');
+      // Wait for A-Frame to load
+      document.querySelector('a-scene').addEventListener('loaded', function() {
+        console.log('A-Frame scene loaded');
         
-        // Add click handlers for each arrow
-        const arrowEast = document.querySelector('#arrow-east');
-        const arrowWest = document.querySelector('#arrow-west');
-        const arrowNorth = document.querySelector('#arrow-north');
-        
-        if (arrowEast) {
-          arrowEast.addEventListener('click', function() {
-            console.log('East arrow clicked!');
-            setTimeout(() => {
-              window.location.href = 'flag.html';
-            }, 500);
-          });
+        // Add click event to treasure
+        const treasure = document.getElementById('treasure');
+        treasure.addEventListener('click', function(evt) {
+          console.log('Treasure clicked!');
+          evt.stopPropagation();
           
-          // VR trigger events
-          arrowEast.addEventListener('triggerdown', function() {
-            console.log('East arrow triggered in VR!');
-            setTimeout(() => {
-              window.location.href = 'flag.html';
-            }, 500);
-          });
-        }
-        
-        if (arrowWest) {
-          arrowWest.addEventListener('click', function() {
-            console.log('West arrow clicked!');
-            setTimeout(() => {
-              window.location.href = 'oatjungle.html';
-            }, 500);
-          });
+          // Show popup
+          document.getElementById('treasurePopup').style.visibility = 'visible';
           
-          // VR trigger events
-          arrowWest.addEventListener('triggerdown', function() {
-            console.log('West arrow triggered in VR!');
-            setTimeout(() => {
-              window.location.href = 'oatjungle.html';
-            }, 500);
-          });
-        }
-        
-        if (arrowNorth) {
-          arrowNorth.addEventListener('click', function() {
-            console.log('North arrow clicked!');
-            setTimeout(() => {
-              window.location.href = 'between.html';
-            }, 500);
-          });
+          // Add explosion effect
+          const explosion = document.createElement('a-entity');
+          explosion.setAttribute('position', treasure.getAttribute('position'));
+          explosion.setAttribute('particle-system', 'preset: explosion; color: #FFD700, #FFA500, #FF4500; particleCount: 150');
+          document.querySelector('a-scene').appendChild(explosion);
           
-          // VR trigger events
-          arrowNorth.addEventListener('triggerdown', function() {
-            console.log('North arrow triggered in VR!');
-            setTimeout(() => {
-              window.location.href = 'between.html';
-            }, 500);
-          });
-        }
+          // Add sound effect (simple beep)
+          try {
+            const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8t');
+            audio.play();
+          } catch(e) {
+            console.log('Sound not available');
+          }
+          
+          // Remove explosion after 3 seconds
+          setTimeout(function() {
+            if (explosion.parentNode) {
+              explosion.parentNode.removeChild(explosion);
+            }
+          }, 3000);
+        });
+
+        // Add click event to compass (redirect to annexure.html)
+        const compass = document.getElementById('compass');
+        compass.addEventListener('click', function(evt) {
+          console.log('Compass clicked!');
+          evt.stopPropagation();
+          window.location.href = 'entrance2.html';
+        });
+
         
+
         // Add hover effects
-        const clickableElements = document.querySelectorAll('.clickable');
-        clickableElements.forEach(function(element) {
+        const clickables = document.querySelectorAll('.clickable');
+        clickables.forEach(function(element) {
           element.addEventListener('mouseenter', function() {
-            element.setAttribute('animation', 'property: scale; to: 2.2 2.2 2.2; dur: 200');
+            this.setAttribute('scale', '1.8 1.8 1.8');
           });
           
           element.addEventListener('mouseleave', function() {
-            element.setAttribute('animation', 'property: scale; to: 2 2 2; dur: 200');
+            this.setAttribute('scale', '1.5 1.5 1.5');
           });
         });
       });
       
-      // Fallback click detection
-      document.addEventListener('click', function(event) {
-        const target = event.target.closest('.clickable');
-        if (target) {
-          console.log('Fallback click detected on:', target.id);
+      // Function to close treasure popup
+      function closePopup() {
+        document.getElementById('treasurePopup').style.visibility = 'hidden';
+      }
+
+      // Add keyboard controls for accessibility
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          // Close any open popups
+          closePopup();
         }
       });
     </script>
